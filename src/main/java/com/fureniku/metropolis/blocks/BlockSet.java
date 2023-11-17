@@ -2,12 +2,23 @@ package com.fureniku.metropolis.blocks;
 
 import com.fureniku.metropolis.RegistrationBase;
 import com.fureniku.metropolis.utils.CreativeTabSet;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.GrassColor;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.registries.RegistryObject;
 
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Class to create multiple similar blocks quickly. Great for matching decorative blocks... like roads!
@@ -21,6 +32,9 @@ public abstract class BlockSet {
     protected RegistryObject<Item>[] _itemBlocks;
     protected String _name;
     protected ResourceLocation _resourceLocation;
+
+    protected BiFunction<BlockAndTintGetter, BlockPos, Integer> tintColorBlock;
+    protected Supplier<Integer> tintColorItem;
 
     /**
      * Create a new blockset. Note all IDs are 1-based as this was taken from roads with the value being height.
@@ -56,6 +70,22 @@ public abstract class BlockSet {
             _blocks[i] = register.retrieveRegisterBlockSet(_name + "_" + id, getClassSupplier(id));
             _itemBlocks[i] = register.getItem(_name + "_" + id);
         }
+    }
+
+    /**
+     * Add a block and item tint colour to the blockset. Currently used for grass roads, maybe more later. Use the BiFunction to calculate based on blockpos if needed.
+     * This should only ever be called in your registration.
+     * @param modEventBus The event bus for your mod's loading stage
+     * @param blockColor The block color for your block (as a BiFunction with types BlockAndTintGetter, BlockPos, returning Integer)
+     * @param itemColor The item colour for your itemblock (as a Supplier returning Integer)
+     * @return An instance of BlockSet for method chaining.
+     */
+    public BlockSet addColorTints(IEventBus modEventBus, BiFunction<BlockAndTintGetter, BlockPos, Integer> blockColor, Supplier<Integer> itemColor) {
+        modEventBus.addListener(this::registerBlockColors);
+        modEventBus.addListener(this::registerItemColors);
+        tintColorBlock = blockColor;
+        tintColorItem = itemColor;
+        return this;
     }
 
     /**
@@ -124,5 +154,18 @@ public abstract class BlockSet {
      */
     public RegistryObject<Item>[] getRegistryItems() {
         return _itemBlocks;
+    }
+
+    //Events for handling the block colours
+    @SubscribeEvent
+    public void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+        event.register((state, tint, pos, tintIndex) -> tintColorBlock.apply(tint, pos),
+                Stream.of(getRegistryBlocks()).map(RegistryObject::get).toArray(Block[]::new));
+    }
+
+    @SubscribeEvent
+    public void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register((stack, tintIndex) -> tintColorItem.get(),
+                Stream.of(getRegistryItems()).map(RegistryObject::get).toArray(Item[]::new));
     }
 }
