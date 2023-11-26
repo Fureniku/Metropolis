@@ -40,6 +40,14 @@ public abstract class MetroBlockStateProvider extends BlockStateProvider {
     }
 
     /**
+     * Get a modelled block, with a matching itemblock. Uses your blocks name to get the matching texture.
+     * @param block Your block
+     */
+    public void blockWithItem(Block block, ResourceLocation loc) {
+        simpleBlockWithItem(block, models().withExistingParent(name(block), loc));
+    }
+
+    /**
      * Get a model for a block with a single texture.
      * @param block your block
      * @param nameSuffix the suffix that should be appended to this block's modelname

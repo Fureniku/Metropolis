@@ -7,6 +7,8 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.ForgeRegistries;
@@ -39,6 +41,8 @@ public abstract class RegistrationBase {
         blockRegistry = DeferredRegister.create(ForgeRegistries.BLOCKS, modid);
         itemRegistry = DeferredRegister.create(ForgeRegistries.ITEMS, modid);
         creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modid);
+        modEventBus.addListener(this::common);
+        modEventBus.addListener(this::client);
         modEventBus.addListener(this::buildCreativeTabs);
         blockRegistry.register(modEventBus);
         itemRegistry.register(modEventBus);
@@ -162,5 +166,52 @@ public abstract class RegistrationBase {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    private void common(final FMLCommonSetupEvent event) {
+        generateCreativeTabs();
+        commonSetup(event);
+    }
+
+    @SubscribeEvent
+    private void client(final FMLClientSetupEvent event) {
+        clientSetup(event);
+    }
+
+    /**
+     * Common setup event. Handle setup stuff for client and server here.
+     * @param event Common setup event
+     */
+    protected abstract void commonSetup(final FMLCommonSetupEvent event);
+
+    /**
+     * Client setup event. Handle client-only setup here (e.g. rendering)
+     * @param event Client setup event
+     */
+    protected abstract void clientSetup(final FMLClientSetupEvent event);
+
+    /**
+     * Getter for the block deferred register
+     * @return
+     */
+    public DeferredRegister<Block> getBlockDeferredRegister() {
+        return blockRegistry;
+    }
+
+    /**
+     * Getter for the item deferred register
+     * @return
+     */
+    public DeferredRegister<Item> getItemDeferredRegister() {
+        return itemRegistry;
+    }
+
+    /**
+     * Getter for the creative tab deferred register
+     * @return
+     */
+    public DeferredRegister<CreativeModeTab> getCreativeTabDeferredRegister() {
+        return creativeTabs;
     }
 }

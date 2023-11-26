@@ -90,6 +90,7 @@ public abstract class MetroBlockBase extends Block {
 
     /**
      * Create the blockstate file for this block! Used by datagen. Override if the block is anything other than a normal, boring, full size block.
+     * For blocks that you don't want to datagen, override this with no function body to skip.
      * @param blockRegistryObject the block's registryobject
      * @param blockStateProvider the blockstate provider class, for some helper functions.
      */
