@@ -42,7 +42,7 @@ public abstract class MetroBlockBase extends Block {
      * Create the blockstate. Override whenever we have a custom blockstate available on a block.
      * @param builder
      */
-    protected void createBlockState(StateDefinition.Builder builder) {}
+    protected void createBlockState(StateDefinition.Builder<Block, BlockState> builder) {}
 
     /**
      * Get which shape should be used for the block. Override when blocks don't have a standard full cube.
@@ -127,7 +127,7 @@ public abstract class MetroBlockBase extends Block {
     }
 
     @Override
-    public void createBlockStateDefinition(StateDefinition.Builder builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         createBlockState(builder);
     }
 }

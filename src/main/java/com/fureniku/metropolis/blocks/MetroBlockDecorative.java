@@ -12,8 +12,8 @@ import net.neoforged.neoforge.registries.RegistryObject;
 public class MetroBlockDecorative extends MetroBlockBase {
 
     private final VoxelShape BLOCK_SHAPE;
-    private TextureSet[] _resources;
-    private String _modelName;
+    protected TextureSet[] _resources;
+    protected String _modelName;
 
     public MetroBlockDecorative(Properties props, String modelName, ResourceLocation resource) {
         this(props, 16, 16, modelName, new TextureSet("texture", resource));
