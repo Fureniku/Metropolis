@@ -1,6 +1,7 @@
 package com.fureniku.metropolis.blocks;
 
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
+import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -77,6 +78,26 @@ public abstract class MetroBlockBase extends Block {
     protected void onRightClickRemote(BlockState state, BlockPos pos, Player player) {}
 
     /**
+     * Called when a neighbouring block changes.
+     * @param state The blockstate of this block
+     * @param level The level
+     * @param pos The position of this block
+     * @param block The block instance of this block
+     * @param neighborPos The position of the block that changed
+     */
+    protected void onNeighbourChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighborPos) {}
+
+    /**
+     * Use to update a block when needed.
+     * @param level Level
+     * @param pos Block position
+     * @param state Blockstate
+     */
+    protected void setBlock(Level level, BlockPos pos, BlockState state) {
+        level.setBlockAndUpdate(pos, state);
+    }
+
+    /**
      * Called when a player interacts with a block.
      * @param state The blockstate
      * @param level The current world
@@ -129,5 +150,10 @@ public abstract class MetroBlockBase extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         createBlockState(builder);
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighborPos, boolean p_55671_) {
+        onNeighbourChanged(state, level, pos, block, neighborPos);
     }
 }

@@ -1,16 +1,15 @@
-package com.fureniku.metropolis.blocks;
+package com.fureniku.metropolis.blocks.decorative;
 
+import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorative;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
-import com.fureniku.metropolis.utils.Debug;
+import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
@@ -22,7 +21,10 @@ import net.neoforged.neoforge.registries.RegistryObject;
 public class MetroBlockDecorativeRotatable extends MetroBlockDecorative {
 
     protected static final DirectionProperty DIRECTION = HorizontalDirectionalBlock.FACING;
-    private final VoxelShape BLOCK_SHAPE;
+    private final VoxelShape BLOCK_SHAPE_NORTH;
+    private final VoxelShape BLOCK_SHAPE_EAST;
+    private final VoxelShape BLOCK_SHAPE_SOUTH;
+    private final VoxelShape BLOCK_SHAPE_WEST;
 
     /**
      * Constructor for decorative blocks which have a specific shape. This shape is rotated automatically.
@@ -30,8 +32,11 @@ public class MetroBlockDecorativeRotatable extends MetroBlockDecorative {
      * @param shape
      */
     public MetroBlockDecorativeRotatable(Properties props, VoxelShape shape, String modelName, TextureSet... textures) {
-        super(props, modelName, textures);
-        BLOCK_SHAPE = shape;
+        super(props, shape, modelName, textures);
+        BLOCK_SHAPE_NORTH = shape;
+        BLOCK_SHAPE_EAST = SimpleUtils.rotateVoxelShape(shape, Direction.EAST);
+        BLOCK_SHAPE_SOUTH = SimpleUtils.rotateVoxelShape(shape, Direction.SOUTH);
+        BLOCK_SHAPE_WEST = SimpleUtils.rotateVoxelShape(shape, Direction.WEST);
         this.registerDefaultState(this.stateDefinition.any().setValue(DIRECTION, Direction.NORTH));
     }
 
@@ -65,6 +70,17 @@ public class MetroBlockDecorativeRotatable extends MetroBlockDecorative {
 
     @Override
     protected VoxelShape getShapeFromBlockState(BlockState pState) {
-        return BLOCK_SHAPE;
+        switch (pState.getValue(DIRECTION)) {
+            case EAST -> {
+                return BLOCK_SHAPE_EAST;
+            }
+            case SOUTH -> {
+                return BLOCK_SHAPE_SOUTH;
+            }
+            case WEST -> {
+                return BLOCK_SHAPE_WEST;
+            }
+        }
+        return BLOCK_SHAPE_NORTH;
     }
 }

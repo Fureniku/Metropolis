@@ -1,35 +1,36 @@
 package com.fureniku.metropolis.datagen;
 
+import com.fureniku.metropolis.RegistrationBase;
 import com.fureniku.metropolis.blocks.MetroBlockBase;
+import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeRotatable;
 import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.ForgeRegistries;
 import net.neoforged.neoforge.registries.RegistryObject;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 /**
- * Metropolis Block State Provider
- * Inherited by subclasses. Subclasses must provide a Collection of block RegistryObjects which should generate.
- * The individual blocks must also implement generateBlockState, or default to simpleBlockWithItem for basic blocks.
+ * Metropolis Block State Provider. Should be usable as-is without needing to subclass.
+ * The individual blocks must implement generateBlockState, or default to simpleBlockWithItem for basic blocks.
  */
-public abstract class MetroBlockStateProvider extends BlockStateProvider {
+public class MetroBlockStateProvider extends BlockStateProvider {
 
+    private RegistrationBase _registrationBase;
     /**
      * Constructor - for use in <code>generate(GatherDataEvent)</code> of your datagen class
      * @param output event.getGenerator().getPackOutput()
      * @param modid your modID (you can probably just pass this in your own super)
      * @param fileHelper event.getExistingFileHelper()
+     * @param registrationBase your mods registration instance (so we can get the blocklist etc)
      */
-    public MetroBlockStateProvider(PackOutput output, String modid, ExistingFileHelper fileHelper) {
+    public MetroBlockStateProvider(PackOutput output, String modid, ExistingFileHelper fileHelper, RegistrationBase registrationBase) {
         super(output, modid, fileHelper);
+        _registrationBase = registrationBase;
     }
 
     /**
@@ -40,8 +41,14 @@ public abstract class MetroBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(block, cubeAll(block));
     }
 
+    /**
+     * A block which can rotate horizontally, e.g. {@link MetroBlockDecorativeRotatable}
+     * @param block Your block
+     * @param model The base model file (assumed facing north)
+     */
     public void horizontalBlock(Block block, ModelFile model) {
         horizontalBlock(block, model, 180);
+        simpleBlockItem(block, model);
     }
 
     /**
@@ -103,7 +110,9 @@ public abstract class MetroBlockStateProvider extends BlockStateProvider {
      * You want to return <code>registration.getBlockArray().values()</code> from your mods RegistrationBase instance.
      * @return all the blocks in the mod
      */
-    protected abstract Collection<RegistryObject<Block>> getBlocks();
+    protected Collection<RegistryObject<Block>> getBlocks() {
+        return _registrationBase.getBlockArray().values();
+    }
 
     /**
      * Iterate through all the blocks registered in your mod, and generate their blockstates.
