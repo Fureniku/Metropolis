@@ -37,6 +37,14 @@ public class MetroBlockDecorativeToggle extends MetroBlockDecorative {
         _item = item;
     }
 
+    public MetroBlockDecorativeToggle(MetroBlockDecorativeBuilder builder, Item item) {
+        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), item, builder.getTextures());
+    }
+
+    public MetroBlockDecorativeToggle(MetroBlockDecorativeBuilder builder) {
+        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), builder.getToggleType(), builder.getTextures());
+    }
+
     public MetroBlockDecorativeToggle(Properties props, VoxelShape shape, VoxelShape toggledShape, String modelName, String toggledModelName, ToggleType type, TextureSet... textures) {
         super(props, shape, modelName, textures);
         BLOCK_SHAPE = shape;

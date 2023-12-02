@@ -22,6 +22,10 @@ public class MetroBlockDecorative extends MetroBlockBase {
         _modelName = modelName;
     }
 
+    public MetroBlockDecorative(MetroBlockDecorativeBuilder builder) {
+        this(builder.getProps(), builder.getShape(), builder.getModelName(), builder.getTextures());
+    }
+
     @Override
     protected VoxelShape getShapeFromBlockState(BlockState pState) {
         return BLOCK_SHAPE;

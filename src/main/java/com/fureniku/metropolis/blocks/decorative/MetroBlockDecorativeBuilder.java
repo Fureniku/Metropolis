@@ -3,7 +3,6 @@ package com.fureniku.metropolis.blocks.decorative;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.DecorativeBuilderType;
 import com.fureniku.metropolis.enums.ToggleType;
-import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -99,6 +98,21 @@ public class MetroBlockDecorativeBuilder {
         return this;
     }
 
+    public MetroBlockDecorativeBuilder get() { return this; }
+    public BlockBehaviour.Properties getProps() { return _props; }
+    public VoxelShape getShape() { return _blockShape; }
+    public VoxelShape getShapeToggled() { return _toggledBlockShape; }
+    public String getModelName() { return _modelName; }
+    public String getToggledModelName() { return _toggledModelName; }
+    public ToggleType getToggleType() { return _toggleType; }
+    public Item getToggleItem() { return _toggleItem; }
+    public TextureSet[] getTextures() { return _textures; }
+
+    /**
+     * Internal level build function. Fine to use for any blocks which can just use the metro base classes directly.
+     * If you are making a derived block, create the builder instance as a separate object and pass it through the super
+     * @return The created block instance
+     */
     public MetroBlockDecorative build() {
         switch (_type) {
             case DECORATIVE:

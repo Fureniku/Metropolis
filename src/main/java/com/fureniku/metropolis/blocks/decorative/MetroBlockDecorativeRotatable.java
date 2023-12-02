@@ -40,6 +40,10 @@ public class MetroBlockDecorativeRotatable extends MetroBlockDecorative {
         this.registerDefaultState(this.stateDefinition.any().setValue(DIRECTION, Direction.NORTH));
     }
 
+    public MetroBlockDecorativeRotatable(MetroBlockDecorativeBuilder builder) {
+        this(builder.getProps(), builder.getShape(), builder.getModelName(), builder.getTextures());
+    }
+
     @Override
     public void generateBlockState(RegistryObject<Block> blockRegistryObject, MetroBlockStateProvider blockStateProvider) {
         Block block = blockRegistryObject.get();

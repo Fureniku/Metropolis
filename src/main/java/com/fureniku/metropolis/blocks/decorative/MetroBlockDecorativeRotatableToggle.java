@@ -60,6 +60,14 @@ public class MetroBlockDecorativeRotatableToggle extends MetroBlockDecorativeRot
         _item = item;
     }
 
+    public MetroBlockDecorativeRotatableToggle(MetroBlockDecorativeBuilder builder, Item item) {
+        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), item, builder.getTextures());
+    }
+
+    public MetroBlockDecorativeRotatableToggle(MetroBlockDecorativeBuilder builder) {
+        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), builder.getToggleType(), builder.getTextures());
+    }
+
     /**
      * Constructor for decorative blocks which have a specific shape. This shape is rotated automatically.
      * @param props
