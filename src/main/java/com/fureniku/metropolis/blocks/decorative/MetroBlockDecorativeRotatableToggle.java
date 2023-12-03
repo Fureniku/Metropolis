@@ -2,6 +2,7 @@ package com.fureniku.metropolis.blocks.decorative;
 
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
+import com.fureniku.metropolis.enums.BlockOffsetDirection;
 import com.fureniku.metropolis.enums.ToggleType;
 import com.fureniku.metropolis.utils.Debug;
 import com.fureniku.metropolis.utils.SimpleUtils;
@@ -55,17 +56,17 @@ public class MetroBlockDecorativeRotatableToggle extends MetroBlockDecorativeRot
      * @param item
      * @param textures
      */
-    public MetroBlockDecorativeRotatableToggle(Properties props, VoxelShape shape, VoxelShape shapeToggled, String modelName, String toggledModelName, Item item, TextureSet... textures) {
-        this(props, shape, shapeToggled, modelName, toggledModelName, ToggleType.ITEM, textures);
+    public MetroBlockDecorativeRotatableToggle(Properties props, VoxelShape shape, VoxelShape shapeToggled, String modelName, String toggledModelName, Item item, BlockOffsetDirection offsetDirection, TextureSet... textures) {
+        this(props, shape, shapeToggled, modelName, toggledModelName, ToggleType.ITEM, offsetDirection, textures);
         _item = item;
     }
 
     public MetroBlockDecorativeRotatableToggle(MetroBlockDecorativeBuilder builder, Item item) {
-        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), item, builder.getTextures());
+        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), item, builder.getOffsetDirection(), builder.getTextures());
     }
 
     public MetroBlockDecorativeRotatableToggle(MetroBlockDecorativeBuilder builder) {
-        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), builder.getToggleType(), builder.getTextures());
+        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), builder.getToggleType(), builder.getOffsetDirection(), builder.getTextures());
     }
 
     /**
@@ -73,8 +74,8 @@ public class MetroBlockDecorativeRotatableToggle extends MetroBlockDecorativeRot
      * @param props
      * @param shape
      */
-    public MetroBlockDecorativeRotatableToggle(Properties props, VoxelShape shape, VoxelShape shapeToggled, String modelName, String toggledModelName, ToggleType type, TextureSet... textures) {
-        super(props, shape, modelName, textures);
+    public MetroBlockDecorativeRotatableToggle(Properties props, VoxelShape shape, VoxelShape shapeToggled, String modelName, String toggledModelName, ToggleType type, BlockOffsetDirection offsetDirection, TextureSet... textures) {
+        super(props, shape, modelName, offsetDirection, textures);
         BLOCK_SHAPE_NORTH = shape;
         BLOCK_SHAPE_EAST = SimpleUtils.rotateVoxelShape(shape, Direction.EAST);
         BLOCK_SHAPE_SOUTH = SimpleUtils.rotateVoxelShape(shape, Direction.SOUTH);

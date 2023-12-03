@@ -1,12 +1,10 @@
 package com.fureniku.metropolis.blocks.decorative;
 
-import com.fureniku.metropolis.blocks.MetroBlockBase;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
+import com.fureniku.metropolis.enums.BlockOffsetDirection;
 import com.fureniku.metropolis.enums.ToggleType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -15,7 +13,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
@@ -32,21 +29,21 @@ public class MetroBlockDecorativeToggle extends MetroBlockDecorative {
     private Item _item;
     private ToggleType _type;
 
-    public MetroBlockDecorativeToggle(Properties props, VoxelShape shape, VoxelShape toggledShape, String modelName, String toggledModelName, Item item, TextureSet... textures) {
-        this(props, shape, toggledShape, modelName, toggledModelName, ToggleType.ITEM, textures);
+    public MetroBlockDecorativeToggle(Properties props, VoxelShape shape, VoxelShape toggledShape, String modelName, String toggledModelName, Item item, BlockOffsetDirection offsetDirection, TextureSet... textures) {
+        this(props, shape, toggledShape, modelName, toggledModelName, ToggleType.ITEM, offsetDirection, textures);
         _item = item;
     }
 
     public MetroBlockDecorativeToggle(MetroBlockDecorativeBuilder builder, Item item) {
-        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), item, builder.getTextures());
+        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), item, builder.getOffsetDirection(), builder.getTextures());
     }
 
     public MetroBlockDecorativeToggle(MetroBlockDecorativeBuilder builder) {
-        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), builder.getToggleType(), builder.getTextures());
+        this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), builder.getToggleType(), builder.getOffsetDirection(), builder.getTextures());
     }
 
-    public MetroBlockDecorativeToggle(Properties props, VoxelShape shape, VoxelShape toggledShape, String modelName, String toggledModelName, ToggleType type, TextureSet... textures) {
-        super(props, shape, modelName, textures);
+    public MetroBlockDecorativeToggle(Properties props, VoxelShape shape, VoxelShape toggledShape, String modelName, String toggledModelName, ToggleType type, BlockOffsetDirection offsetDirection, TextureSet... textures) {
+        super(props, shape, modelName, offsetDirection, textures);
         BLOCK_SHAPE = shape;
         BLOCK_SHAPE_TOGGLED = toggledShape;
         _toggledModelName = toggledModelName;

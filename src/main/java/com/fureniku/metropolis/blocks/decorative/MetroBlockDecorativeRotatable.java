@@ -1,8 +1,8 @@
 package com.fureniku.metropolis.blocks.decorative;
 
-import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorative;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
+import com.fureniku.metropolis.enums.BlockOffsetDirection;
 import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -31,8 +31,8 @@ public class MetroBlockDecorativeRotatable extends MetroBlockDecorative {
      * @param props
      * @param shape
      */
-    public MetroBlockDecorativeRotatable(Properties props, VoxelShape shape, String modelName, TextureSet... textures) {
-        super(props, shape, modelName, textures);
+    public MetroBlockDecorativeRotatable(Properties props, VoxelShape shape, String modelName, BlockOffsetDirection offsetDirection, TextureSet... textures) {
+        super(props, shape, modelName, offsetDirection, textures);
         BLOCK_SHAPE_NORTH = shape;
         BLOCK_SHAPE_EAST = SimpleUtils.rotateVoxelShape(shape, Direction.EAST);
         BLOCK_SHAPE_SOUTH = SimpleUtils.rotateVoxelShape(shape, Direction.SOUTH);
@@ -41,7 +41,7 @@ public class MetroBlockDecorativeRotatable extends MetroBlockDecorative {
     }
 
     public MetroBlockDecorativeRotatable(MetroBlockDecorativeBuilder builder) {
-        this(builder.getProps(), builder.getShape(), builder.getModelName(), builder.getTextures());
+        this(builder.getProps(), builder.getShape(), builder.getModelName(), builder.getOffsetDirection(), builder.getTextures());
     }
 
     @Override

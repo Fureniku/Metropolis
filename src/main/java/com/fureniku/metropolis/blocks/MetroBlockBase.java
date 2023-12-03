@@ -10,9 +10,11 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -51,6 +53,27 @@ public abstract class MetroBlockBase extends Block {
      * @return a VoxelShape for the block (or its current state)
      */
     protected VoxelShape getShapeFromBlockState(BlockState blockState) { return Shapes.block(); }
+
+    /**
+     * Get an offset for the block which can be calculated from world positions.
+     * Big example use case is most things that get placed onto Roads, which self-align downwards to appear on the road below.
+     * @param blockState Blockstate
+     * @param level BlockGetter acting as Level
+     * @param pos BlockPos
+     * @return Vector3 of the offset
+     */
+    protected Vec3 getOffset(BlockState blockState, BlockGetter level, BlockPos pos) {
+        return Vec3.ZERO;
+    }
+
+    @Override
+    public float getMaxHorizontalOffset() {
+        return 0.25F;
+    }
+
+    public float getMaxVerticalOffset() {
+        return 0.2F;
+    }
 
     /**
      * Called when a block is right-clicked by a player
@@ -125,8 +148,12 @@ public abstract class MetroBlockBase extends Block {
      * My mods all use my functions. So on updates, I just change these, and everything is fixed... right?
      */
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return getShapeFromBlockState(pState);
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext pContext) {
+        Vec3 offset = getOffset(state, level, pos);
+        if (offset != Vec3.ZERO) {
+            return getShapeFromBlockState(state).move(offset.x, offset.y, offset.z);
+        }
+        return getShapeFromBlockState(state);
     }
 
     @Override

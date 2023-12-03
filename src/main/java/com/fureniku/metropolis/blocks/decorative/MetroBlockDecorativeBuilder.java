@@ -1,6 +1,7 @@
 package com.fureniku.metropolis.blocks.decorative;
 
 import com.fureniku.metropolis.datagen.TextureSet;
+import com.fureniku.metropolis.enums.BlockOffsetDirection;
 import com.fureniku.metropolis.enums.DecorativeBuilderType;
 import com.fureniku.metropolis.enums.ToggleType;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +21,7 @@ public class MetroBlockDecorativeBuilder {
     private DecorativeBuilderType _type;
     private Item _toggleItem;
     private ToggleType _toggleType;
+    private BlockOffsetDirection _offsetDirection = BlockOffsetDirection.NONE;
 
     public MetroBlockDecorativeBuilder(BlockBehaviour.Properties props) {
         this(props, DecorativeBuilderType.DECORATIVE);
@@ -93,8 +95,8 @@ public class MetroBlockDecorativeBuilder {
         return setTextures(new TextureSet("texture", resource));
     }
 
-    public MetroBlockDecorativeBuilder setLit() {
-        _props = _props.lightLevel(p_50874_ -> 15).noOcclusion();
+    public MetroBlockDecorativeBuilder setOffsetDirection(BlockOffsetDirection offsetDirection) {
+        _offsetDirection = offsetDirection;
         return this;
     }
 
@@ -107,6 +109,7 @@ public class MetroBlockDecorativeBuilder {
     public ToggleType getToggleType() { return _toggleType; }
     public Item getToggleItem() { return _toggleItem; }
     public TextureSet[] getTextures() { return _textures; }
+    public BlockOffsetDirection getOffsetDirection() { return _offsetDirection; }
 
     /**
      * Internal level build function. Fine to use for any blocks which can just use the metro base classes directly.
@@ -116,23 +119,23 @@ public class MetroBlockDecorativeBuilder {
     public MetroBlockDecorative build() {
         switch (_type) {
             case DECORATIVE:
-                return new MetroBlockDecorative(_props, _blockShape, _modelName, _textures);
+                return new MetroBlockDecorative(_props, _blockShape, _modelName, _offsetDirection, _textures);
 
             case DECORATIVE_TOGGLE:
                 if (_toggleItem != null) {
-                    return new MetroBlockDecorativeToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleItem, _textures);
+                    return new MetroBlockDecorativeToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleItem, _offsetDirection, _textures);
                 }
-                return new MetroBlockDecorativeToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleType, _textures);
+                return new MetroBlockDecorativeToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleType, _offsetDirection, _textures);
 
             case DECORATIVE_ROTATABLE:
-                return new MetroBlockDecorativeRotatable(_props, _blockShape, _modelName, _textures);
+                return new MetroBlockDecorativeRotatable(_props, _blockShape, _modelName, _offsetDirection, _textures);
 
             case DECORATIVE_ROTATABLE_TOGGLE:
                 if (_toggleItem != null) {
-                    return new MetroBlockDecorativeRotatableToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleItem, _textures);
+                    return new MetroBlockDecorativeRotatableToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleItem, _offsetDirection, _textures);
                 }
-                return new MetroBlockDecorativeRotatableToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleType, _textures);
+                return new MetroBlockDecorativeRotatableToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleType, _offsetDirection, _textures);
         }
-        return new MetroBlockDecorative(_props, _blockShape, _modelName, _textures);
+        return new MetroBlockDecorative(_props, _blockShape, _modelName, _offsetDirection, _textures);
     }
 }
