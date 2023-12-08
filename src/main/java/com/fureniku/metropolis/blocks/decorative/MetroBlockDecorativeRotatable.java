@@ -1,5 +1,6 @@
 package com.fureniku.metropolis.blocks.decorative;
 
+import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockOffsetDirection;

@@ -1,6 +1,7 @@
 package com.fureniku.metropolis.utils;
 
 import com.fureniku.metropolis.Metropolis;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 
@@ -26,8 +27,48 @@ public class Debug {
      * @param msg The message you want to send
      * @param params vararg for parameters
      */
-    public static void Log(String msg, String... params) {
-        Metropolis.LOGGER.atInfo().log(getModFomCall(getCallPackage()) + msg, (String[]) params);
+    public static void Log(String msg, Object... params) {
+        Metropolis.LOGGER.atInfo().log(String.format(getModFomCall(getCallPackage()) + msg, params));
+    }
+
+    /**
+     * Print a DebugLog message, only client-side.
+     * @param msg The message you want to send
+     * @param params vararg for parameters
+     */
+    public static void LogClient(Level level, String msg, Object... params) {
+        if (level.isClientSide) {
+            LogDebug(msg, params);
+        }
+    }
+
+    /**
+     * Print a DebugLog message, only server-side.
+     * @param msg The message you want to send
+     * @param params vararg for parameters
+     */
+    public static void LogServer(Level level, String msg, Object... params) {
+        if (!level.isClientSide) {
+            LogDebug(msg, params);
+        }
+    }
+
+    /**
+     * Print a DebugLog message, and prefix whether the message came from the client or server
+     * @param msg The message you want to send
+     * @param params vararg for parameters
+     */
+    public static void LogSided(Level level, String msg, Object... params) {
+        LogDebug((level.isClientSide ? "[CLIENT] " : "[SERVER] ") + msg, params);
+    }
+
+    /**
+     * Print debug messages. Mainly used for development - shouldn't even show in a release build.
+     * @param msg The message you want to send
+     * @param params vararg for parameters
+     */
+    public static void LogDebug(String msg, Object... params) {
+        Metropolis.LOGGER.atDebug().log(String.format(getModFomCall(getCallPackage()) + msg, params));
     }
 
     /**
@@ -36,8 +77,18 @@ public class Debug {
      * @param msg The message you want to send
      * @param params vararg for parameters
      */
-    public static void LogDebug(String msg, String... params) {
-        Metropolis.LOGGER.atDebug().log(getModFomCall(getCallPackage()) + msg, (String[]) params);
+    public static void LogDebugVerbose(String msg, Object... params) {
+        Metropolis.LOGGER.atDebug().log(String.format(getModFomCall(getCallPackage()) + msg, params));
+        Metropolis.LOGGER.atDebug().log(printClassLine());
+    }
+
+    /**
+     * Print a warning message. If something's not going well, but not broken, send it here.
+     * @param msg The message you want to send
+     * @param params vararg for parameters
+     */
+    public static void LogWarning(String msg, Object... params) {
+        Metropolis.LOGGER.atWarn().log(String.format(getModFomCall(getCallPackage()) + msg, params));
         Metropolis.LOGGER.atDebug().log(printClassLine());
     }
 
@@ -47,8 +98,8 @@ public class Debug {
      * @param msg The message you want to send
      * @param params vararg for parameters
      */
-    public static void LogWarning(String msg, String... params) {
-        Metropolis.LOGGER.atWarn().log(getModFomCall(getCallPackage()) + msg, (String[]) params);
+    public static void LogWarningVerbose(String msg, Object... params) {
+        Metropolis.LOGGER.atWarn().log(String.format(getModFomCall(getCallPackage()) + msg, params));
         Metropolis.LOGGER.atDebug().log(printClassLine());
     }
 
@@ -58,8 +109,8 @@ public class Debug {
      * @param msg The message you want to send
      * @param params vararg for parameters
      */
-    public static void LogError(String msg, String... params) {
-        Metropolis.LOGGER.atError().log(getModFomCall(getCallPackage()) + msg, (String[]) params);
+    public static void LogError(String msg, Object... params) {
+        Metropolis.LOGGER.atError().log(String.format(getModFomCall(getCallPackage()) + msg, params));
         Metropolis.LOGGER.atDebug().log(printClassLine());
     }
 
@@ -69,8 +120,8 @@ public class Debug {
      * @param msg The message you want to send
      * @param params vararg for parameters
      */
-    public static void LogCritical(String msg, String... params) {
-        Metropolis.LOGGER.atError().log(getModFomCall(getCallPackage()) + msg, (String[]) params);
+    public static void LogCritical(String msg, Object... params) {
+        Metropolis.LOGGER.atError().log(String.format(getModFomCall(getCallPackage()) + msg, params));
         new Exception().printStackTrace(System.out);
         //TODO send a message to local player / all online ops
     }

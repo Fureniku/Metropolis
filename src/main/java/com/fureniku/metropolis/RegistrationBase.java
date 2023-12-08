@@ -1,14 +1,20 @@
 package com.fureniku.metropolis;
 
+import com.fureniku.metropolis.test.RegistrationTest;
 import com.fureniku.metropolis.utils.CreativeTabSet;
 import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.ForgeRegistries;
@@ -25,9 +31,9 @@ import java.util.function.Supplier;
  */
 public abstract class RegistrationBase {
 
-    protected DeferredRegister<Block> blockRegistry;
-    protected DeferredRegister<Item> itemRegistry;
-    protected DeferredRegister<CreativeModeTab> creativeTabs;
+    protected final DeferredRegister<Block> blockRegistry;
+    protected final DeferredRegister<Item> itemRegistry;
+    protected final DeferredRegister<CreativeModeTab> creativeTabs;
 
     private HashMap<String, RegistryObject<Block>> block_map = new HashMap<>();
     private HashMap<String, RegistryObject<Item>> item_map = new HashMap<>();
@@ -44,13 +50,17 @@ public abstract class RegistrationBase {
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::buildCreativeTabs);
+        modEventBus.addListener(this::modelInit);
+        modEventBus.addListener(this::modelBakeComplete);
+        modEventBus.addListener(this::modifyBake);
+        modEventBus.addListener(this::generate);
         blockRegistry.register(modEventBus);
         itemRegistry.register(modEventBus);
         creativeTabs.register(modEventBus);
     }
 
     /**
-     * Initialize the registration, and register all your stuff. Cannot be called from the constructor!
+     * Initialize the registration, and register all your stuff.
      * Handle the creation of blocks in here - either creating blocksets, or call registerBlockSet(name, BlockClass::new)
      * Handle the creation of items
      * Handle the creation of creative tabs (new creativetabset, pass creativeTabs as first arg)
@@ -97,14 +107,6 @@ public abstract class RegistrationBase {
      */
     public final HashMap<String, RegistryObject<Block>> getBlockArray() {
         return block_map;
-    }
-
-    private void addBlock(String key, RegistryObject<Block> value) {
-        block_map.put(key, value);
-    }
-
-    private void addItem(String key, RegistryObject<Item> value) {
-        item_map.put(key, value);
     }
 
     /**
@@ -168,28 +170,34 @@ public abstract class RegistrationBase {
         }
     }
 
-    @SubscribeEvent
-    private void common(final FMLCommonSetupEvent event) {
-        generateCreativeTabs();
-        commonSetup(event);
-    }
-
-    @SubscribeEvent
-    private void client(final FMLClientSetupEvent event) {
-        clientSetup(event);
-    }
-
     /**
      * Common setup event. Handle setup stuff for client and server here.
-     * @param event Common setup event
+     * @param event FMLCommonSetupEvent
      */
     protected abstract void commonSetup(final FMLCommonSetupEvent event);
 
     /**
      * Client setup event. Handle client-only setup here (e.g. rendering)
-     * @param event Client setup event
+     * @param event FMLClientSetupEvent
      */
     protected abstract void clientSetup(final FMLClientSetupEvent event);
+
+    /**
+     * Model setup event. Register model overrides etc here. (Client only)
+     * @param event ModelEvent.RegisterGeometryLoaders
+     */
+    protected abstract void modelSetup(ModelEvent.RegisterGeometryLoaders event);
+    protected abstract void modifyBakingResult(ModelEvent.ModifyBakingResult event);
+    protected abstract void bakingComplete(ModelEvent.BakingCompleted event);
+
+    /**
+     * Data generation event. Register data generations here.
+     * @param event The parent event in case you need anything else from it
+     * @param gen The data generator
+     * @param packOutput Pack output
+     * @param efh Existing file helper
+     */
+    protected abstract void dataGen(GatherDataEvent event, DataGenerator gen, PackOutput packOutput, ExistingFileHelper efh);
 
     /**
      * Getter for the block deferred register
@@ -213,5 +221,55 @@ public abstract class RegistrationBase {
      */
     public DeferredRegister<CreativeModeTab> getCreativeTabDeferredRegister() {
         return creativeTabs;
+    }
+
+    //Setup generation and call the abstract function.
+    private void generate(GatherDataEvent event) {
+        DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+        ExistingFileHelper efh = event.getExistingFileHelper();
+        dataGen(event, generator, packOutput, efh);
+    }
+
+    //Call anything we want on the common setup then offer it to end mods
+    @SubscribeEvent
+    private void common(final FMLCommonSetupEvent event) {
+        generateCreativeTabs();
+        commonSetup(event);
+    }
+
+    //Call anything we want on the client setup then offer it to end mods
+    @SubscribeEvent
+    private void client(final FMLClientSetupEvent event) {
+        clientSetup(event);
+    }
+
+    //Call anything we want on the model setup then offer it to end mods
+    @SubscribeEvent
+    private void modelInit(ModelEvent.RegisterGeometryLoaders event) {
+        Debug.Log("EVENT CALL: Register Geometry Loaders");
+        modelSetup(event);
+    }
+
+    @SubscribeEvent
+    private void modifyBake(ModelEvent.ModifyBakingResult event) {
+        Debug.Log("EVENT CALL: Modify Baking Result");
+        modifyBakingResult(event);
+    }
+
+    @SubscribeEvent
+    private void modelBakeComplete(ModelEvent.BakingCompleted event) {
+        Debug.Log("EVENT CALL: Baking completed");
+        bakingComplete(event);
+    }
+
+    //Add a block to the registry
+    private void addBlock(String key, RegistryObject<Block> value) {
+        block_map.put(key, value);
+    }
+
+    //Add an item to the registry
+    private void addItem(String key, RegistryObject<Item> value) {
+        item_map.put(key, value);
     }
 }

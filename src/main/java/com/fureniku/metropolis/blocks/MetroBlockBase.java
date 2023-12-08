@@ -1,7 +1,6 @@
 package com.fureniku.metropolis.blocks;
 
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
-import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -10,7 +9,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
@@ -105,7 +103,7 @@ public abstract class MetroBlockBase extends Block {
      * @param state The blockstate of this block
      * @param level The level
      * @param pos The position of this block
-     * @param block The block instance of this block
+     * @param block The block instance of THE NEW block (Changed from Forge, which passed the OLD block in that space here - often air)
      * @param neighborPos The position of the block that changed
      */
     protected void onNeighbourChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighborPos) {}
@@ -181,6 +179,6 @@ public abstract class MetroBlockBase extends Block {
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighborPos, boolean p_55671_) {
-        onNeighbourChanged(state, level, pos, block, neighborPos);
+        onNeighbourChanged(state, level, pos, state.getBlock(), neighborPos);
     }
 }

@@ -1,5 +1,7 @@
 package com.fureniku.metropolis.blocks.decorative;
 
+import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
+import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeToggleBuilder;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockOffsetDirection;
@@ -61,11 +63,11 @@ public class MetroBlockDecorativeRotatableToggle extends MetroBlockDecorativeRot
         _item = item;
     }
 
-    public MetroBlockDecorativeRotatableToggle(MetroBlockDecorativeBuilder builder, Item item) {
+    public MetroBlockDecorativeRotatableToggle(MetroBlockDecorativeToggleBuilder builder, Item item) {
         this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), item, builder.getOffsetDirection(), builder.getTextures());
     }
 
-    public MetroBlockDecorativeRotatableToggle(MetroBlockDecorativeBuilder builder) {
+    public MetroBlockDecorativeRotatableToggle(MetroBlockDecorativeToggleBuilder builder) {
         this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), builder.getToggleType(), builder.getOffsetDirection(), builder.getTextures());
     }
 
@@ -111,8 +113,6 @@ public class MetroBlockDecorativeRotatableToggle extends MetroBlockDecorativeRot
                 modelToggled = modelToggled.texture(_resources[i].getKey(), _resources[i].getTexture());
             }
         }
-
-        Debug.Log("Normal: " + modelNormal + ", toggled: " + _toggledModelName);
 
         BlockModelBuilder finalModelNormal = modelNormal;
         BlockModelBuilder finalModelToggled = modelToggled;

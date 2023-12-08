@@ -63,9 +63,11 @@ public abstract class RegistrationGroup {
      * Passthrough to register a blockset
      * @param name blockset name
      * @param blockClass block's class
+     * @return (Optional) The passed-in name, to add to a list for creative registration etc
      */
-    protected void registerBlockSet(String name, Supplier<Block> blockClass) {
+    protected String registerBlockSet(String name, Supplier<Block> blockClass) {
         registration.registerBlockSet(name, blockClass);
+        return name;
     }
 
     /**

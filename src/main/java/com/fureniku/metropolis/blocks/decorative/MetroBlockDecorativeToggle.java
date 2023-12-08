@@ -1,5 +1,7 @@
 package com.fureniku.metropolis.blocks.decorative;
 
+import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
+import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeToggleBuilder;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockOffsetDirection;
@@ -34,11 +36,11 @@ public class MetroBlockDecorativeToggle extends MetroBlockDecorative {
         _item = item;
     }
 
-    public MetroBlockDecorativeToggle(MetroBlockDecorativeBuilder builder, Item item) {
+    public MetroBlockDecorativeToggle(MetroBlockDecorativeToggleBuilder builder, Item item) {
         this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), item, builder.getOffsetDirection(), builder.getTextures());
     }
 
-    public MetroBlockDecorativeToggle(MetroBlockDecorativeBuilder builder) {
+    public MetroBlockDecorativeToggle(MetroBlockDecorativeToggleBuilder builder) {
         this(builder.getProps(), builder.getShape(), builder.getShapeToggled(), builder.getModelName(), builder.getToggledModelName(), builder.getToggleType(), builder.getOffsetDirection(), builder.getTextures());
     }
 

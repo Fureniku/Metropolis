@@ -3,10 +3,12 @@ package com.fureniku.metropolis.datagen;
 import com.fureniku.metropolis.RegistrationBase;
 import com.fureniku.metropolis.blocks.MetroBlockBase;
 import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeRotatable;
+import com.fureniku.metropolis.client.rendering.MetroLoaderBuilder;
 import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.ForgeRegistries;
@@ -57,6 +59,24 @@ public class MetroBlockStateProvider extends BlockStateProvider {
      */
     public void blockWithItem(Block block, ResourceLocation loc) {
         simpleBlockWithItem(block, models().withExistingParent(name(block), loc));
+    }
+
+    /**
+     * Get a block which connects on four horizontal sides with an idetical connecting model, and a central post (e.g. vanilla walls/fences)
+     * @param block The block
+     * @param post The central part, always rendered
+     * @param side The connecting side, modelled for the NORTH side. Automatically rotated to the other three sides.
+     */
+    public void horizontalConnectingBlock(Block block, ModelFile post, ModelFile side) {
+        MultiPartBlockStateBuilder builder = getMultipartBuilder(block)
+                .part().modelFile(post).addModel().end();
+        fourWayMultipart(builder, side);
+    }
+
+    public void customRenderBlockTest(Block block) {
+        BlockModelBuilder model = models().getBuilder(name(block)).parent(models().getExistingFile(mcLoc("cube")))
+                .customLoader((builder, helper) -> new MetroLoaderBuilder(modLoc(name(block)), builder, helper)).end();
+        simpleBlockWithItem(block, model);
     }
 
     /**

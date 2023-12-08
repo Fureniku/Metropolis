@@ -1,6 +1,7 @@
 package com.fureniku.metropolis.blocks.decorative;
 
 import com.fureniku.metropolis.blocks.MetroBlockBase;
+import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockOffsetDirection;
@@ -8,11 +9,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.registries.RegistryObject;
+
+import java.util.Optional;
 
 public class MetroBlockDecorative extends MetroBlockBase {
 
@@ -22,17 +26,20 @@ public class MetroBlockDecorative extends MetroBlockBase {
     private BlockOffsetDirection _offsetDirection = BlockOffsetDirection.NONE;
 
     public MetroBlockDecorative(Properties props, VoxelShape shape, String modelName, BlockOffsetDirection offsetDirection, TextureSet... textures) {
-        super(props);
+        super(offsetDirection == BlockOffsetDirection.NONE ? props : props.dynamicShape());
         BLOCK_SHAPE = shape;
         _resources = textures;
         _modelName = modelName;
-        _offsetDirection = offsetDirection;
+        if (offsetDirection != BlockOffsetDirection.NONE) {
+            _offsetDirection = offsetDirection;
+        }
     }
 
     public MetroBlockDecorative(MetroBlockDecorativeBuilder builder) {
         this(builder.getProps(), builder.getShape(), builder.getModelName(), builder.getOffsetDirection(), builder.getTextures());
     }
 
+    @Override
     protected Vec3 getOffset(BlockState blockState, BlockGetter level, BlockPos pos) {
         double x = 0;
         double y = 0;
@@ -42,8 +49,7 @@ public class MetroBlockDecorative extends MetroBlockBase {
                 return Vec3.ZERO;
             }
             case DOWN -> {
-                BlockPos offsetPos = pos.below();
-                y = (1 - level.getBlockState(offsetPos).getShape(level, offsetPos).max(Direction.Axis.Y)) * -1;
+                y = getOffsetBlockPosValue(level, pos.below(), Direction.Axis.Y, true);
             }
             case BACK -> {
             }
@@ -54,11 +60,22 @@ public class MetroBlockDecorative extends MetroBlockBase {
             case RIGHT -> {
             }
             case UP -> {
-                BlockPos offsetPos = pos.below();
-                y = level.getBlockState(offsetPos).getShape(level, offsetPos).min(Direction.Axis.Y);
+                y = getOffsetBlockPosValue(level, pos.above(), Direction.Axis.Y, false);
             }
         }
+        double finalX = x;
+        double finalY = y;
+        double finalZ = z;
+        blockState.offsetFunction = Optional.of((state, lvl, blockPos) -> new Vec3(finalX, finalY, finalZ));
         return new Vec3(x, y, z);
+    }
+
+    private double getOffsetBlockPosValue(BlockGetter level, BlockPos pos, Direction.Axis axis, boolean positive) {
+        if (level.getBlockState(pos).getBlock() == Blocks.AIR) {
+            return 0;
+        }
+        VoxelShape shape = level.getBlockState(pos).getShape(level, pos);
+        return positive ? (1 - shape.max(axis)) * -1 : shape.min(axis);
     }
 
     @Override
@@ -77,9 +94,5 @@ public class MetroBlockDecorative extends MetroBlockBase {
         }
 
         blockStateProvider.simpleBlockWithItem(block, bmb);
-    }
-
-    public Vec3 getOffset(BlockGetter p_60825_, BlockPos p_60826_) {
-        return Vec3.ZERO;//this.offsetFunction.<Vec3>map(p_273089_ -> p_273089_.evaluate(this.asState(), p_60825_, p_60826_)).orElse(Vec3.ZERO);
     }
 }
