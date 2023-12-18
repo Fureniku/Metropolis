@@ -24,7 +24,7 @@ import net.neoforged.neoforge.registries.RegistryObject;
  * This abstracts all the forge calls into my own ones. In other words, when Forge updates and changes everything, changing this class SHOULD fix all my mods basic blocks.
  * Also provides some "events" and other base common functionality
  */
-public abstract class MetroBlockBase extends Block {
+public class MetroBlockBase extends Block {
 
     public MetroBlockBase(Properties props) {
         super(props);

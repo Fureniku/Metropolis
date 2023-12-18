@@ -93,6 +93,26 @@ public class MetroBlockDecorative extends MetroBlockBase {
             }
         }
 
-        blockStateProvider.simpleBlockWithItem(block, bmb);
+        blockStateProvider.simpleBlockWithItem(block, applyTexturesToModels(bmb)[0]);
+    }
+
+    protected BlockModelBuilder applyTexturesToModel(BlockModelBuilder bmb) {
+        if (_resources.length > 1) {
+            for (int i = 1; i < _resources.length; i++) {
+                bmb = bmb.texture(_resources[i].getKey(), _resources[i].getTexture());
+            }
+        }
+        return bmb;
+    }
+
+    protected BlockModelBuilder[] applyTexturesToModels(BlockModelBuilder... bmb) {
+        if (_resources.length > 1) {
+            for (int i = 0; i < bmb.length; i++) {
+                for (int j = 1; j < _resources.length; j++) {
+                    bmb[i] = bmb[i].texture(_resources[j].getKey(), _resources[j].getTexture());
+                }
+            }
+        }
+        return bmb;
     }
 }

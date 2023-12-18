@@ -128,11 +128,14 @@ public class Debug {
 
     //Find which mod sent the message
     private static String getModFomCall(String callPkg) {
-        for (HashMap.Entry<String, String> entry : _registeredMods.entrySet()) {
-            if (callPkg.contains(entry.getKey())) {
-                return "[" + entry.getValue() + "] ";
+        if (!_registeredMods.isEmpty()) {
+            for (HashMap.Entry<String, String> entry : _registeredMods.entrySet()) {
+                if (callPkg.contains(entry.getKey())) {
+                    return "[" + entry.getValue() + "] ";
+                }
             }
         }
+        Metropolis.LOGGER.atError().log("[METROPOLIS] Trying to debug with no registered mods!");
         return "[UNKNOWN MOD: " + callPkg + "] ";
     }
 

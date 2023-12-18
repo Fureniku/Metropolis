@@ -68,8 +68,7 @@ public class MetroBlockDecorativeToggle extends MetroBlockDecorative {
 
         BlockModelBuilder finalModelNormal = modelNormal;
         BlockModelBuilder finalModelToggled = modelToggled;
-        blockStateProvider.getVariantBuilder(block)
-                .forAllStates(state -> ConfiguredModel.builder()
+        blockStateProvider.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder()
                         .modelFile(state.getValue(TOGGLED) ? finalModelToggled : finalModelNormal)
                         .build());
 

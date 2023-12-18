@@ -4,7 +4,7 @@ import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBu
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockOffsetDirection;
-import com.fureniku.metropolis.utils.SimpleUtils;
+import com.fureniku.metropolis.utils.ShapeUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -35,9 +35,9 @@ public class MetroBlockDecorativeRotatable extends MetroBlockDecorative {
     public MetroBlockDecorativeRotatable(Properties props, VoxelShape shape, String modelName, BlockOffsetDirection offsetDirection, TextureSet... textures) {
         super(props, shape, modelName, offsetDirection, textures);
         BLOCK_SHAPE_NORTH = shape;
-        BLOCK_SHAPE_EAST = SimpleUtils.rotateVoxelShape(shape, Direction.EAST);
-        BLOCK_SHAPE_SOUTH = SimpleUtils.rotateVoxelShape(shape, Direction.SOUTH);
-        BLOCK_SHAPE_WEST = SimpleUtils.rotateVoxelShape(shape, Direction.WEST);
+        BLOCK_SHAPE_EAST = ShapeUtils.rotateVoxelShape(shape, Direction.EAST);
+        BLOCK_SHAPE_SOUTH = ShapeUtils.rotateVoxelShape(shape, Direction.SOUTH);
+        BLOCK_SHAPE_WEST = ShapeUtils.rotateVoxelShape(shape, Direction.WEST);
         this.registerDefaultState(this.stateDefinition.any().setValue(DIRECTION, Direction.NORTH));
     }
 

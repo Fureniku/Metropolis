@@ -114,13 +114,16 @@ public abstract class RegistrationBase {
      * The block can use any class and thus have pretty much any functionality. This should be used for the majority of blocks.
      * @param name The internal name for the block
      * @param blockClass a supplier for the block's class, for example <code>MetroBlockBase::new</code>
+     * @return The passed name (to keep a list, if you want)
      */
-    public void registerBlockSet(String name, Supplier<Block> blockClass) {
+    public String registerBlockSet(String name, Supplier<Block> blockClass) {
         RegistryObject<Block> block = blockRegistry.register(name, blockClass);
         RegistryObject<Item> blockItem = itemRegistry.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
 
         addBlock(name, block);
         addItem(name, blockItem);
+
+        return name;
     }
 
     /**

@@ -5,10 +5,12 @@ import com.fureniku.metropolis.blocks.MetroBlockBase;
 import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeRotatable;
 import com.fureniku.metropolis.client.rendering.MetroLoaderBuilder;
 import com.fureniku.metropolis.utils.Debug;
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CrossCollisionBlock;
+import net.minecraft.world.level.block.PipeBlock;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.ForgeRegistries;
@@ -68,8 +70,7 @@ public class MetroBlockStateProvider extends BlockStateProvider {
      * @param side The connecting side, modelled for the NORTH side. Automatically rotated to the other three sides.
      */
     public void horizontalConnectingBlock(Block block, ModelFile post, ModelFile side) {
-        MultiPartBlockStateBuilder builder = getMultipartBuilder(block)
-                .part().modelFile(post).addModel().end();
+        MultiPartBlockStateBuilder builder = getMultipartBuilder(block).part().modelFile(post).addModel().end();
         fourWayMultipart(builder, side);
     }
 

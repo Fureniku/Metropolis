@@ -1,13 +1,11 @@
 package com.fureniku.metropolis.blocks.decorative;
 
-import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
 import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeToggleBuilder;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockOffsetDirection;
 import com.fureniku.metropolis.enums.ToggleType;
-import com.fureniku.metropolis.utils.Debug;
-import com.fureniku.metropolis.utils.SimpleUtils;
+import com.fureniku.metropolis.utils.ShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -79,14 +77,14 @@ public class MetroBlockDecorativeRotatableToggle extends MetroBlockDecorativeRot
     public MetroBlockDecorativeRotatableToggle(Properties props, VoxelShape shape, VoxelShape shapeToggled, String modelName, String toggledModelName, ToggleType type, BlockOffsetDirection offsetDirection, TextureSet... textures) {
         super(props, shape, modelName, offsetDirection, textures);
         BLOCK_SHAPE_NORTH = shape;
-        BLOCK_SHAPE_EAST = SimpleUtils.rotateVoxelShape(shape, Direction.EAST);
-        BLOCK_SHAPE_SOUTH = SimpleUtils.rotateVoxelShape(shape, Direction.SOUTH);
-        BLOCK_SHAPE_WEST = SimpleUtils.rotateVoxelShape(shape, Direction.WEST);
+        BLOCK_SHAPE_EAST = ShapeUtils.rotateVoxelShape(shape, Direction.EAST);
+        BLOCK_SHAPE_SOUTH = ShapeUtils.rotateVoxelShape(shape, Direction.SOUTH);
+        BLOCK_SHAPE_WEST = ShapeUtils.rotateVoxelShape(shape, Direction.WEST);
 
         BLOCK_SHAPE_NORTH_TOGGLED = shapeToggled;
-        BLOCK_SHAPE_EAST_TOGGLED = SimpleUtils.rotateVoxelShape(shapeToggled, Direction.EAST);
-        BLOCK_SHAPE_SOUTH_TOGGLED = SimpleUtils.rotateVoxelShape(shapeToggled, Direction.SOUTH);
-        BLOCK_SHAPE_WEST_TOGGLED = SimpleUtils.rotateVoxelShape(shapeToggled, Direction.WEST);
+        BLOCK_SHAPE_EAST_TOGGLED = ShapeUtils.rotateVoxelShape(shapeToggled, Direction.EAST);
+        BLOCK_SHAPE_SOUTH_TOGGLED = ShapeUtils.rotateVoxelShape(shapeToggled, Direction.SOUTH);
+        BLOCK_SHAPE_WEST_TOGGLED = ShapeUtils.rotateVoxelShape(shapeToggled, Direction.WEST);
         this.registerDefaultState(this.stateDefinition.any().setValue(DIRECTION, Direction.NORTH).setValue(TOGGLED, false));
 
         _toggledModelName = toggledModelName;
