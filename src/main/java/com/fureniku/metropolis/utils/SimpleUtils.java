@@ -8,6 +8,8 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.ArrayList;
+
 public class SimpleUtils {
 
     //This class was technically the start of Metropolis.
@@ -94,5 +96,21 @@ public class SimpleUtils {
         return "X: " + shape.min(Direction.Axis.X) + " - " + shape.max(Direction.Axis.X) +
             " Y: " + shape.min(Direction.Axis.Y) + " - " + shape.max(Direction.Axis.Y) +
             " Z: " + shape.min(Direction.Axis.Z) + " - " + shape.max(Direction.Axis.Z);
+    }
+
+    /**
+     * Check if an arraylist contains an object which is an instance of a subclass of the list type.
+     * @param list The arraylist
+     * @param type the type to check
+     * @return whether an instance of that object exists in the list
+     * @param <T>
+     */
+    public static <T>boolean containsType(ArrayList<? extends T> list, Class<? extends T> type) {
+        for (T obj : list) {
+            if (type.isInstance(obj)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

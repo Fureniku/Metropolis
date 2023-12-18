@@ -12,8 +12,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public class MetroBlockGenerated extends MetroBlockDecorative {
 
-    public MetroBlockGenerated(Properties props, VoxelShape shape, String modelName, BlockOffsetDirection offsetDirection, TextureSet... textures) {
-        super(props, shape, modelName, offsetDirection, textures);
+    public MetroBlockGenerated(Properties props, VoxelShape shape, String modelDir, String modelName, BlockOffsetDirection offsetDirection, TextureSet... textures) {
+        super(props, shape, modelDir, modelName, offsetDirection, textures);
     }
 
     public static void registerBlockStates() {

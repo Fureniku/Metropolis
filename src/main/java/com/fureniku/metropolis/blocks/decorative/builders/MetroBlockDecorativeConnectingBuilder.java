@@ -41,7 +41,7 @@ public class MetroBlockDecorativeConnectingBuilder extends MetroBlockDecorativeB
     public MetroBlockDecorative build() {
         switch (_type) {
             case DECORATIVE_CONNECT_HORIZONTAL:
-                return new MetroBlockConnectingHorizontal(_props, _blockShape, _modelName, _offsetDirection, _checkUp, _checkDown, _textures);
+                return new MetroBlockConnectingHorizontal(_props, _blockShape, _modelDir, _modelName, _offsetDirection, _checkUp, _checkDown, _textures);
         }
         return super.build();
     }

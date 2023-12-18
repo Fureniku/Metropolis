@@ -32,8 +32,8 @@ public class MetroBlockDecorativeRotatable extends MetroBlockDecorative {
      * @param props
      * @param shape
      */
-    public MetroBlockDecorativeRotatable(Properties props, VoxelShape shape, String modelName, BlockOffsetDirection offsetDirection, TextureSet... textures) {
-        super(props, shape, modelName, offsetDirection, textures);
+    public MetroBlockDecorativeRotatable(Properties props, VoxelShape shape, String modelDir, String modelName, BlockOffsetDirection offsetDirection, TextureSet... textures) {
+        super(props, shape, modelDir, modelName, offsetDirection, textures);
         BLOCK_SHAPE_NORTH = shape;
         BLOCK_SHAPE_EAST = SimpleUtils.rotateVoxelShape(shape, Direction.EAST);
         BLOCK_SHAPE_SOUTH = SimpleUtils.rotateVoxelShape(shape, Direction.SOUTH);
@@ -42,23 +42,12 @@ public class MetroBlockDecorativeRotatable extends MetroBlockDecorative {
     }
 
     public MetroBlockDecorativeRotatable(MetroBlockDecorativeBuilder builder) {
-        this(builder.getProps(), builder.getShape(), builder.getModelName(), builder.getOffsetDirection(), builder.getTextures());
+        this(builder.getProps(), builder.getShape(), builder.getModelDirectory(), builder.getModelName(), builder.getOffsetDirection(), builder.getTextures());
     }
 
     @Override
     public void generateBlockState(RegistryObject<Block> blockRegistryObject, MetroBlockStateProvider blockStateProvider) {
-        Block block = blockRegistryObject.get();
-        BlockModelBuilder bmb;
-        if (_modelName == null || _resources == null) {
-            bmb = blockStateProvider.getModelFilesWithTexture(block, "", "blocks/decorative/" + block.getName(), blockStateProvider.modLoc("blocks/decorative/" + block.getName()));
-        } else {
-            bmb = blockStateProvider.getModelFilesWithTexture(block, "", "blocks/decorative/" + _modelName, _resources[0].getTexture());
-            if (_resources.length > 1) {
-                for (int i = 1; i < _resources.length; i++) {
-                    bmb = bmb.texture(_resources[i].getKey(), _resources[i].getTexture());
-                }
-            }
-        }
+        prepareModels(blockRegistryObject.get(), blockStateProvider);
         blockStateProvider.horizontalBlock(block, bmb);
     }
 

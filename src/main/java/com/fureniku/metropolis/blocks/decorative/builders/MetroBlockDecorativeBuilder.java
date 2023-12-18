@@ -14,6 +14,7 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
 
     protected BlockBehaviour.Properties _props;
     protected VoxelShape _blockShape = Block.box(0, 0, 0, 16, 16, 16);
+    protected String _modelDir = null;
     protected String _modelName = null;
     protected TextureSet[] _textures = null;
     protected DecorativeBuilderType _type;
@@ -45,6 +46,11 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
     }
     //endregion
 
+    public T setModelDirectory(String modelDir) {
+        _modelDir = modelDir;
+        return (T) this;
+    }
+
     public T setModelName(String modelName) {
         _modelName = modelName;
         return (T) this;
@@ -67,6 +73,7 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
     public T get() { return (T) this; }
     public BlockBehaviour.Properties getProps() { return _props; }
     public VoxelShape getShape() { return _blockShape; }
+    public String getModelDirectory() { return _modelDir; }
     public String getModelName() { return _modelName; }
     public TextureSet[] getTextures() { return _textures; }
     public BlockOffsetDirection getOffsetDirection() { return _offsetDirection; }
@@ -79,11 +86,11 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
     public MetroBlockDecorative build() {
         switch (_type) {
             case DECORATIVE:
-                return new MetroBlockDecorative(_props, _blockShape, _modelName, _offsetDirection, _textures);
+                return new MetroBlockDecorative(_props, _blockShape, _modelDir, _modelName, _offsetDirection, _textures);
             case DECORATIVE_ROTATABLE:
-                return new MetroBlockDecorativeRotatable(_props, _blockShape, _modelName, _offsetDirection, _textures);
+                return new MetroBlockDecorativeRotatable(_props, _blockShape, _modelDir, _modelName, _offsetDirection, _textures);
         }
         Debug.LogError("Unable to successfully build decorative block with type %s - defaulting to base class", _type.toString());
-        return new MetroBlockDecorative(_props, _blockShape, _modelName, _offsetDirection, _textures);
+        return new MetroBlockDecorative(_props, _blockShape, _modelDir, _modelName, _offsetDirection, _textures);
     }
 }

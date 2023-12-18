@@ -3,18 +3,22 @@ package com.fureniku.metropolis.datagen;
 import com.fureniku.metropolis.RegistrationBase;
 import com.fureniku.metropolis.blocks.MetroBlockBase;
 import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeRotatable;
+import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeRotatableFloorWall;
 import com.fureniku.metropolis.client.rendering.MetroLoaderBuilder;
 import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CrossCollisionBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.ForgeRegistries;
 import net.neoforged.neoforge.registries.RegistryObject;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 /**
  * Metropolis Block State Provider. Should be usable as-is without needing to subclass.
@@ -51,6 +55,15 @@ public class MetroBlockStateProvider extends BlockStateProvider {
     public void horizontalBlock(Block block, ModelFile model) {
         horizontalBlock(block, model, 180);
         simpleBlockItem(block, model);
+    }
+
+    public void horizontalFloorWallBlock(Block block, ModelFile model) {
+        getVariantBuilder(block)
+                .forAllStates(state -> ConfiguredModel.builder()
+                        .modelFile(model)
+                        .rotationX(state.getValue(MetroBlockDecorativeRotatableFloorWall.DIRECTION).toXRot())
+                        .rotationY(state.getValue(MetroBlockDecorativeRotatableFloorWall.DIRECTION).toYRot() + 180)
+                        .build());
     }
 
     /**

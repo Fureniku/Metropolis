@@ -71,14 +71,14 @@ public class MetroBlockDecorativeToggleBuilder extends MetroBlockDecorativeBuild
         switch (_type) {
             case DECORATIVE_TOGGLE:
                 if (_toggleItem != null) {
-                    return new MetroBlockDecorativeToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleItem, _offsetDirection, _textures);
+                    return new MetroBlockDecorativeToggle(_props, _blockShape, _toggledBlockShape, _modelDir, _modelName, _toggledModelName, _toggleItem, _offsetDirection, _textures);
                 }
-                return new MetroBlockDecorativeToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleType, _offsetDirection, _textures);
+                return new MetroBlockDecorativeToggle(_props, _blockShape, _toggledBlockShape, _modelDir, _modelName, _toggledModelName, _toggleType, _offsetDirection, _textures);
             case DECORATIVE_ROTATABLE_TOGGLE:
                 if (_toggleItem != null) {
-                    return new MetroBlockDecorativeRotatableToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleItem, _offsetDirection, _textures);
+                    return new MetroBlockDecorativeRotatableToggle(_props, _blockShape, _toggledBlockShape, _modelDir, _modelName, _toggledModelName, _toggleItem, _offsetDirection, _textures);
                 }
-                return new MetroBlockDecorativeRotatableToggle(_props, _blockShape, _toggledBlockShape, _modelName, _toggledModelName, _toggleType, _offsetDirection, _textures);
+                return new MetroBlockDecorativeRotatableToggle(_props, _blockShape, _toggledBlockShape, _modelDir, _modelName, _toggledModelName, _toggleType, _offsetDirection, _textures);
             default:
                 return super.build();
         }

@@ -25,15 +25,15 @@ public class MetroBlockConnectingHorizontal extends MetroBlockDecorative {
     private boolean _checkUp = false;
     private boolean _checkDown = false;
 
-    public MetroBlockConnectingHorizontal(Properties props, VoxelShape shape, String modelName, BlockOffsetDirection offsetDirection, boolean checkUp, boolean checkDown, TextureSet... textures) {
-        super(props, shape, modelName, offsetDirection, textures);
+    public MetroBlockConnectingHorizontal(Properties props, VoxelShape shape, String modelDir, String modelName, BlockOffsetDirection offsetDirection, boolean checkUp, boolean checkDown, TextureSet... textures) {
+        super(props, shape, modelDir, modelName, offsetDirection, textures);
         _checkUp = checkUp;
         _checkDown = checkDown;
         this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false));
     }
 
     public MetroBlockConnectingHorizontal(MetroBlockDecorativeConnectingBuilder builder) {
-        this(builder.getProps(), builder.getShape(), builder.getModelName(), builder.getOffsetDirection(), builder.getCheckUp(), builder.getCheckDown(), builder.getTextures());
+        this(builder.getProps(), builder.getShape(), builder.getModelDirectory(), builder.getModelName(), builder.getOffsetDirection(), builder.getCheckUp(), builder.getCheckDown(), builder.getTextures());
     }
 
     @Override

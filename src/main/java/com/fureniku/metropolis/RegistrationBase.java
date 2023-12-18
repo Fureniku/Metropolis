@@ -35,6 +35,11 @@ public abstract class RegistrationBase {
     protected final DeferredRegister<Item> itemRegistry;
     protected final DeferredRegister<CreativeModeTab> creativeTabs;
 
+    /**
+     * Used by registration groups
+     */
+    public final String modid;
+
     private HashMap<String, RegistryObject<Block>> block_map = new HashMap<>();
     private HashMap<String, RegistryObject<Item>> item_map = new HashMap<>();
 
@@ -44,6 +49,7 @@ public abstract class RegistrationBase {
      * @param modEventBus the event bus
      */
     public RegistrationBase(String modid, IEventBus modEventBus) {
+        this.modid = modid;
         blockRegistry = DeferredRegister.create(ForgeRegistries.BLOCKS, modid);
         itemRegistry = DeferredRegister.create(ForgeRegistries.ITEMS, modid);
         creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modid);
