@@ -1,8 +1,10 @@
 package com.fureniku.metropolis;
 
+import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.utils.CreativeTabSet;
 import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -86,5 +88,45 @@ public abstract class RegistrationGroup {
      */
     protected RegistryObject<Item> getItem(String key) {
         return registration.getItem(key);
+    }
+
+    /**
+     * Get a resource location for the named resource. Override to provide subfolders, else it defaults to getLocFull.
+     * @param name the name of the resource you're getting in the location.
+     * @return resource location
+     */
+    protected ResourceLocation getLoc(String name) {
+        return getLocFull(name);
+    }
+
+    /**
+     * Get a resource location for the named resource. Always returns the contextual root (blocks/, models/ etc).
+     * Override getLoc if you consistently want a subfolder.
+     * @param name the name of the resource you're getting in the location.
+     * @return resource location
+     */
+    protected final ResourceLocation getLocFull(String name) {
+        return new ResourceLocation(registration.modid, name);
+    }
+
+    /**
+     * Get a TextureSet for the texture name at the named resource locaation.
+     * Calls getLoc(), so will use defined subfolders.
+     * @param name The name of the texture for a face, passed to the model json
+     * @param loc The name of the texture file (without png)
+     * @return TextureSet
+     */
+    protected TextureSet texture(String name, String loc) {
+        return texture(name, getLoc(loc));
+    }
+
+    /**
+     * Get a TextureSet for the texture name at the named resource locaation.
+     * @param name The name of the texture for a face, passed to the model json
+     * @param loc ResourceLocation for the texture file
+     * @return TextureSet
+     */
+    protected TextureSet texture(String name, ResourceLocation loc) {
+        return new TextureSet(name, loc);
     }
 }

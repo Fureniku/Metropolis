@@ -1,6 +1,7 @@
 package com.fureniku.metropolis.blocks.decorative;
 
 import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeConnectingBuilder;
+import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockConnectionType;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.registries.RegistryObject;
+
+import java.util.ArrayList;
 
 public class MetroBlockConnectingHorizontal extends MetroBlockDecorative {
 
@@ -45,6 +48,8 @@ public class MetroBlockConnectingHorizontal extends MetroBlockDecorative {
         _connectedModelName = connectedModelName;
         _itemModelName = itemModelName;
 
+    public MetroBlockConnectingHorizontal(Properties props, VoxelShape shape, String modelDir, String modelName, BlockOffsetDirection offsetDirection, boolean checkUp, boolean checkDown, TextureSet... textures) {
+        super(props, shape, modelDir, modelName, new ArrayList<HelperBase>(), textures);
         _checkUp = checkUp;
         _checkDown = checkDown;
         _centerFourSided = centerFourSided;
@@ -57,7 +62,7 @@ public class MetroBlockConnectingHorizontal extends MetroBlockDecorative {
     }
 
     public MetroBlockConnectingHorizontal(MetroBlockDecorativeConnectingBuilder builder) {
-        this(builder.getProps(), builder.getModelName(), builder.getConnectedModelName(), builder.getItemModelName(), builder.getOffsetDirection(), builder.getCheckUp(), builder.getCheckDown(), builder.getCenterFourSided(), builder.getIndependentModelsPerSide(),  builder.getShapes(), builder.getTag(), builder.getConnectionType(), builder.getTextures());
+        this(builder.getProps(), builder.getShape(), builder.getModelDirectory(), builder.getModelName(), builder.getOffsetDirection(), builder.getCheckUp(), builder.getCheckDown(), builder.getTextures());
     }
 
     public String getTag() {
