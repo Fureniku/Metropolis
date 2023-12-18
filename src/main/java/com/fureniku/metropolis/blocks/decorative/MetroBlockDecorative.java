@@ -87,7 +87,7 @@ public class MetroBlockDecorative extends MetroBlockBase implements IToggleable 
         for (int i = 0; i < _helpers.size(); i++) {
             if (_helpers.get(i) instanceof HelperBlockstate) {
                 HelperBlockstate helper = (HelperBlockstate) _helpers.get(i);
-                helper.generateBlockstate();
+                //helper.generateBlockstate();
                 generatedBlock = true;
             }
         }

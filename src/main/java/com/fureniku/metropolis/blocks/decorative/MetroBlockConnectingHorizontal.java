@@ -1,6 +1,7 @@
 package com.fureniku.metropolis.blocks.decorative;
 
 import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeConnectingBuilder;
+import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockOffsetDirection;
@@ -15,6 +16,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.registries.RegistryObject;
 
+import java.util.ArrayList;
+
 public class MetroBlockConnectingHorizontal extends MetroBlockDecorative {
 
     protected static final BooleanProperty NORTH = BooleanProperty.create("north");
@@ -26,7 +29,7 @@ public class MetroBlockConnectingHorizontal extends MetroBlockDecorative {
     private boolean _checkDown = false;
 
     public MetroBlockConnectingHorizontal(Properties props, VoxelShape shape, String modelDir, String modelName, BlockOffsetDirection offsetDirection, boolean checkUp, boolean checkDown, TextureSet... textures) {
-        super(props, shape, modelDir, modelName, offsetDirection, textures);
+        super(props, shape, modelDir, modelName, new ArrayList<HelperBase>(), textures);
         _checkUp = checkUp;
         _checkDown = checkDown;
         this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false));
