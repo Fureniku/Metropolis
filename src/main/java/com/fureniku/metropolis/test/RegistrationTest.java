@@ -3,15 +3,18 @@ package com.fureniku.metropolis.test;
 import com.fureniku.metropolis.Metropolis;
 import com.fureniku.metropolis.RegistrationBase;
 import com.fureniku.metropolis.blocks.MetroBlockBase;
-import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeConnectingBuilder;
-import com.fureniku.metropolis.client.rendering.MetroModelLoader;
+import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorative;
+import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
+import com.fureniku.metropolis.blocks.decorative.helpers.ConnectHorizontalHelper;
+import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
+import com.fureniku.metropolis.blocks.decorative.helpers.OffsetHelper;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
+import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockConnectionType;
 import com.fureniku.metropolis.enums.DecorativeBuilderType;
 import com.fureniku.metropolis.utils.CreativeTabSet;
-import com.fureniku.metropolis.utils.Debug;
 import com.fureniku.metropolis.utils.ShapeUtils;
-import net.minecraft.client.resources.model.ModelBakery;
+import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -19,11 +22,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.model.geometry.GeometryLoaderManager;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
@@ -48,29 +49,34 @@ public class RegistrationTest extends RegistrationBase {
 
     @Override
     public void init(IEventBus modEventBus) {
-        blockNames.add(registerBlockSet("testblock", () -> new MetroBlockBase(_props)));
-
         VoxelShape[] shapeA = ShapeUtils.makeShapes(4f, 4f);
         VoxelShape[] shapeB = ShapeUtils.makeShapes(2.5f, 4f, 16f);
+        VoxelShape[] shapes = ShapeUtils.combineMultiShapes(shapeA, shapeB);
 
-        MetroBlockDecorativeConnectingBuilder connectingBuilder = new MetroBlockDecorativeConnectingBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setShapes(ShapeUtils.combineMultiShapes(shapeA, shapeB)).setModelName("barrier_concrete_middle");//.setTextures(TEST_TEXTURE_1);
+        //MetroBlockDecorativeBuilder connectingBuilder = new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1);
+        //ConnectHorizontalHelper.Builder connectHelperBuilder = new ConnectHorizontalHelper.Builder().setShapes(shapes);
 
-        blockNames.add(registerBlockSet("test_connecting_enum_same", () -> connectingBuilder.setConnectionType(BlockConnectionType.SAME).build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_sameclass_a", () -> connectingBuilder.setConnectionType(BlockConnectionType.SAMECLASS).build())); //Not really a valid test
-        blockNames.add(registerBlockSet("test_connecting_enum_sameclass_b", () -> connectingBuilder.setConnectionType(BlockConnectionType.SAMECLASS).build())); //Not really a valid test
-        blockNames.add(registerBlockSet("test_connecting_enum_tag_a", () -> connectingBuilder.setConnectionType(BlockConnectionType.TAG).setTag("tag_a").build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_tag_b", () -> connectingBuilder.setConnectionType(BlockConnectionType.TAG).setTag("tag_b").build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_connecting", () -> connectingBuilder.setConnectionType(BlockConnectionType.CONNECTING).build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_metro", () -> connectingBuilder.setConnectionType(BlockConnectionType.METRO).build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_solid", () -> connectingBuilder.setConnectionType(BlockConnectionType.SOLID).build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_solid_same", () -> connectingBuilder.setConnectionType(BlockConnectionType.SOLID_SAME).build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_solid_sameclass_a", () -> connectingBuilder.setConnectionType(BlockConnectionType.SOLID_SAMECLASS).build())); //Not really a valid test
-        blockNames.add(registerBlockSet("test_connecting_enum_solid_sameclass_b", () -> connectingBuilder.setConnectionType(BlockConnectionType.SOLID_SAMECLASS).build())); //Not really a valid test
-        blockNames.add(registerBlockSet("test_connecting_enum_solid_tag_a", () -> connectingBuilder.setConnectionType(BlockConnectionType.SOLID_TAG).setTag("tag_a").build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_solid_tag_b", () -> connectingBuilder.setConnectionType(BlockConnectionType.SOLID_TAG).setTag("tag_b").build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_solid_conecting", () -> connectingBuilder.setConnectionType(BlockConnectionType.SOLID_CONNECTING).build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_solid_metro", () -> connectingBuilder.setConnectionType(BlockConnectionType.SOLID_METRO).build()));
-        blockNames.add(registerBlockSet("test_connecting_enum_all", () -> connectingBuilder.setConnectionType(BlockConnectionType.ALL).build()));
+        ArrayList<HelperBase> helperList = new ArrayList<HelperBase>();
+        helperList.add(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SAME).build());
+        MetroBlockDecorative.MetroBlockStateFactory factory =  MetroBlockDecorative.getBlockFactory(helperList);
+
+        blockNames.add(registerBlockSet("test_connecting_enum_same", () -> factory.makeBlock(_props, shapes[0], "blocks/decorative/", "barrier_concrete_middle", "", SimpleUtils.containsType(helperList, OffsetHelper.class), new TextureSet("texture", TEST_TEXTURE_1))));//new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SAME).build()).build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_same", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SAME).build()).build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_sameclass_a", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SAMECLASS).build()).build())); //Not really a valid test
+        //blockNames.add(registerBlockSet("test_connecting_enum_sameclass_b", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SAMECLASS).build()).build())); //Not really a valid test
+        //blockNames.add(registerBlockSet("test_connecting_enum_tag_a", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.TAG).build()).setTag("tag_a").build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_tag_b", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.TAG).build()).setTag("tag_b").build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_connecting", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.CONNECTING).build()).build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_metro", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.METRO).build()).build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_solid", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SOLID).build()).build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_solid_same", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SOLID_SAME).build()).build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_solid_sameclass_a", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SOLID_SAMECLASS).build()).build())); //Not really a valid test
+        //blockNames.add(registerBlockSet("test_connecting_enum_solid_sameclass_b", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SOLID_SAMECLASS).build()).build())); //Not really a valid test
+        //blockNames.add(registerBlockSet("test_connecting_enum_solid_tag_a", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SOLID_TAG).build()).setTag("tag_a").build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_solid_tag_b", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SOLID_TAG).build()).setTag("tag_b").build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_solid_conecting", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SOLID_CONNECTING).build()).build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_solid_metro", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.SOLID_METRO).build()).build()));
+        //blockNames.add(registerBlockSet("test_connecting_enum_all", () -> new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelName("barrier_concrete_middle").setModelDirectory("blocks/decorative/").setTextures(TEST_TEXTURE_1).setHelpers(new ConnectHorizontalHelper.Builder().setShapes(shapes).setConnectionType(BlockConnectionType.ALL).build()).build()));
 
         _testTab = new CreativeTabSet(getCreativeTabDeferredRegister(), "tab_test", getItem(blockNames.get(0)));
     }

@@ -1,0 +1,6 @@
+{
+  "parent": "metropolis:blocks/decorative/barrier_concrete_middle_connection",
+  "textures": {
+    "texture": "metropolis:block/test_texture_1"
+  }
+}

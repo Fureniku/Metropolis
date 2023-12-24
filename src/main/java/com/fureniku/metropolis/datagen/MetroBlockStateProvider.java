@@ -2,25 +2,17 @@ package com.fureniku.metropolis.datagen;
 
 import com.fureniku.metropolis.RegistrationBase;
 import com.fureniku.metropolis.blocks.MetroBlockBase;
-import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeRotatable;
-import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeRotatableFloorWall;
 import com.fureniku.metropolis.client.rendering.MetroLoaderBuilder;
 import com.fureniku.metropolis.utils.Debug;
-import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CrossCollisionBlock;
-import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.ForgeRegistries;
 import net.neoforged.neoforge.registries.RegistryObject;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 /**
  * Metropolis Block State Provider. Should be usable as-is without needing to subclass.
@@ -50,7 +42,7 @@ public class MetroBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * A block which can rotate horizontally, e.g. {@link MetroBlockDecorativeRotatable}
+     * A block which can rotate horizontally
      * @param block Your block
      * @param model The base model file (assumed facing north)
      */
@@ -59,14 +51,14 @@ public class MetroBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(block, model);
     }
 
-    public void horizontalFloorWallBlock(Block block, ModelFile model) {
+    /*public void horizontalFloorWallBlock(Block block, ModelFile model) {
         getVariantBuilder(block)
                 .forAllStates(state -> ConfiguredModel.builder()
                         .modelFile(model)
                         .rotationX(state.getValue(MetroBlockDecorativeRotatableFloorWall.DIRECTION).toXRot())
                         .rotationY(state.getValue(MetroBlockDecorativeRotatableFloorWall.DIRECTION).toYRot() + 180)
                         .build());
-    }
+    }*/ //TODO
 
     /**
      * Get a modelled block, with a matching itemblock. Uses your blocks name to get the matching texture.
@@ -146,6 +138,45 @@ public class MetroBlockStateProvider extends BlockStateProvider {
      */
     protected Collection<RegistryObject<Block>> getBlocks() {
         return _registrationBase.getBlockArray().values();
+    }
+
+    public BlockModelBuilder prepareModels(Block block, String modelDir, String modelName, TextureSet[] resources) {
+        return prepareModels(block, "", modelDir, modelName, resources);
+    }
+
+    public BlockModelBuilder prepareModels(Block block, String nameSuffix, String modelDir, String modelName, TextureSet[] resources) {
+        BlockModelBuilder bmb;
+        if (modelName == null || resources == null) {
+            bmb = getModelFilesWithTexture(block, "", modelDir + block.getName(), modLoc(modelDir + block.getName()));
+        } else {
+            bmb = applyTexturesToModel(resources, getModelFilesWithTexture(block, "", modelDir + modelName, resources[0].getTexture()));
+            if (resources.length > 1) {
+                for (int i = 1; i < resources.length; i++) {
+                    bmb = bmb.texture(resources[i].getKey(), resources[i].getTexture());
+                }
+            }
+        }
+        return bmb;
+    }
+
+    public BlockModelBuilder applyTexturesToModel(TextureSet[] resources, BlockModelBuilder bmb) {
+        if (resources.length > 1) {
+            for (int i = 1; i < resources.length; i++) {
+                bmb = bmb.texture(resources[i].getKey(), resources[i].getTexture());
+            }
+        }
+        return bmb;
+    }
+
+    public BlockModelBuilder[] applyTexturesToModels(TextureSet[] resources, BlockModelBuilder... bmb) {
+        if (resources.length > 1) {
+            for (int i = 0; i < bmb.length; i++) {
+                for (int j = 1; j < resources.length; j++) {
+                    bmb[i] = bmb[i].texture(resources[j].getKey(), resources[j].getTexture());
+                }
+            }
+        }
+        return bmb;
     }
 
     /**

@@ -1,24 +1,27 @@
 package com.fureniku.metropolis.blocks.decorative.builders;
 
 import com.fureniku.metropolis.blocks.decorative.*;
+import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
 import com.fureniku.metropolis.datagen.TextureSet;
-import com.fureniku.metropolis.enums.BlockOffsetDirection;
 import com.fureniku.metropolis.enums.DecorativeBuilderType;
-import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T>> {
 
     protected BlockBehaviour.Properties _props;
     protected VoxelShape _blockShape = Block.box(0, 0, 0, 16, 16, 16);
-    protected String _modelDir = null;
+    protected String _modelDir = "blocks/";
     protected String _modelName = null;
+    protected String _tag = "untagged";
     protected TextureSet[] _textures = null;
     protected DecorativeBuilderType _type;
-    protected BlockOffsetDirection _offsetDirection = BlockOffsetDirection.NONE;
+    protected ArrayList<HelperBase> _helpers = new ArrayList<>();
 
     public MetroBlockDecorativeBuilder(BlockBehaviour.Properties props) {
         this(props, DecorativeBuilderType.DECORATIVE);
@@ -56,6 +59,11 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
         return (T) this;
     }
 
+    public T setTag(String tag) {
+        _tag = tag;
+        return (T) this;
+    }
+
     public T setTextures(TextureSet... textures) {
         _textures = textures;
         return (T) this;
@@ -65,8 +73,8 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
         return setTextures(new TextureSet("texture", resource));
     }
 
-    public T setOffsetDirection(BlockOffsetDirection offsetDirection) {
-        _offsetDirection = offsetDirection;
+    public T setHelpers(HelperBase... helpers) {
+        _helpers.addAll(Arrays.asList(helpers));
         return (T) this;
     }
 
@@ -75,8 +83,9 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
     public VoxelShape getShape() { return _blockShape; }
     public String getModelDirectory() { return _modelDir; }
     public String getModelName() { return _modelName; }
+    public String getTag() { return _tag; }
     public TextureSet[] getTextures() { return _textures; }
-    public BlockOffsetDirection getOffsetDirection() { return _offsetDirection; }
+    public ArrayList<HelperBase> getHelpers() { return _helpers; }
 
     /**
      * Internal level build function. Fine to use for any blocks which can just use the metro base classes directly.
@@ -84,13 +93,6 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
      * @return The created block instance
      */
     public MetroBlockDecorative build() {
-        switch (_type) {
-            case DECORATIVE:
-                return new MetroBlockDecorative(_props, _blockShape, _modelDir, _modelName, _offsetDirection, _textures);
-            case DECORATIVE_ROTATABLE:
-                return new MetroBlockDecorativeRotatable(_props, _blockShape, _modelDir, _modelName, _offsetDirection, _textures);
-        }
-        Debug.LogError("Unable to successfully build decorative block with type %s - defaulting to base class", _type.toString());
-        return new MetroBlockDecorative(_props, _blockShape, _modelDir, _modelName, _offsetDirection, _textures);
+        return new MetroBlockDecorative(_props, _blockShape, _modelDir, _modelName, _tag, _helpers, _textures);
     }
 }

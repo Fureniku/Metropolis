@@ -57,49 +57,6 @@ public class SimpleUtils {
     }
 
     /**
-     * Rotate a VoxelShape horizontally to the new direction. Assumes the passed one is facing north,
-     * so east is 90, south 180 and west 270 degrees.
-     * @param shape Original shape
-     * @param newDirection Target direction
-     * @return New shape
-     */
-    /*public static VoxelShape rotateVoxelShape(VoxelShape shape, Direction newDirection) {
-        if (newDirection != Direction.NORTH) {
-            double xMin = shape.min(Direction.Axis.X);
-            double xMax = 1 - shape.max(Direction.Axis.X);
-            double yMin = shape.min(Direction.Axis.Y);
-            double yMax = 1 - shape.max(Direction.Axis.Y);
-            double zMin = shape.min(Direction.Axis.Z);
-            double zMax = 1 - shape.max(Direction.Axis.Z);
-            switch (newDirection) {
-                case EAST:
-                    return createNewShape(zMax, yMin, xMin, zMin, yMax, xMax);
-                case SOUTH:
-                    return createNewShape(xMax, yMin, zMax, xMin, yMax, zMin);
-                case WEST:
-                    return createNewShape(zMin, yMin, xMax, zMax, yMax, xMin);
-            }
-        }
-        return shape;
-    }
-
-    private static VoxelShape createNewShape(double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
-        return Block.box(xMin * 16, yMin * 16, zMin * 16, 16 - (xMax * 16), 16 - (yMax * 16), 16 - (zMax * 16));
-    }
-    */ //TODO moved to shape utils?
-
-    /**
-     * Get a VoxelShape and convert it to a printable string with the min/max points of each axis.
-     * @param shape VoxelShape
-     * @return A string to print with the logger
-     */
-    public static String getPrintableShape(VoxelShape shape) {
-        return "X: " + shape.min(Direction.Axis.X) + " - " + shape.max(Direction.Axis.X) +
-            " Y: " + shape.min(Direction.Axis.Y) + " - " + shape.max(Direction.Axis.Y) +
-            " Z: " + shape.min(Direction.Axis.Z) + " - " + shape.max(Direction.Axis.Z);
-    }
-
-    /**
      * Check if an arraylist contains an object which is an instance of a subclass of the list type.
      * @param list The arraylist
      * @param type the type to check

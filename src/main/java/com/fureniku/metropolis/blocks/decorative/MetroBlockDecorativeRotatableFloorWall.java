@@ -1,4 +1,4 @@
-package com.fureniku.metropolis.blocks.decorative;
+/*package com.fureniku.metropolis.blocks.decorative;
 
 import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
@@ -18,9 +18,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.registries.RegistryObject;
 
-/**
- * Decorative non-full block which can be rotated
- */
 public class MetroBlockDecorativeRotatableFloorWall extends MetroBlockDecorative {
 
     public static final EnumProperty<DirectionFloorWall> DIRECTION = EnumProperty.create("direction", DirectionFloorWall.class);
@@ -30,12 +27,6 @@ public class MetroBlockDecorativeRotatableFloorWall extends MetroBlockDecorative
     private final VoxelShape BLOCK_SHAPE_SOUTH;
     private final VoxelShape BLOCK_SHAPE_WEST;
 
-    /**
-     * Constructor for decorative blocks which have a specific shape. This shape is rotated automatically.
-     * @param props
-     * @param shapeFloor The shape of the object when on the floor. The same shape is used for all rotations.
-     * @param shapeWall The shape of the object on the wall. Rotated automatically from the north side shape.
-     */
     public MetroBlockDecorativeRotatableFloorWall(Properties props, VoxelShape shapeFloor, VoxelShape shapeWall, String modelDir, String modelName, BlockOffsetDirection offsetDirection, TextureSet... textures) {
         super(props, shapeFloor, modelDir, modelName, offsetDirection, textures);
         BLOCK_SHAPE_FLOOR = shapeFloor;
@@ -96,3 +87,4 @@ public class MetroBlockDecorativeRotatableFloorWall extends MetroBlockDecorative
         return BLOCK_SHAPE_FLOOR;
     }
 }
+*/
