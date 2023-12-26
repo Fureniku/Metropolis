@@ -59,9 +59,6 @@ public abstract class MetroBlockDecorative extends MetroBlockBase implements ITo
         //BlockState stateHolder = ;
         setTag(tag);
 
-
-
-
         this.registerDefaultState(this.getStateDefinition().any().setValue(ConnectHorizontalHelper.NORTH, false).setValue(ConnectHorizontalHelper.EAST, false).setValue(ConnectHorizontalHelper.SOUTH, false).setValue(ConnectHorizontalHelper.WEST, false));
     }
 
@@ -70,11 +67,11 @@ public abstract class MetroBlockDecorative extends MetroBlockBase implements ITo
         public MetroBlockDecorative makeBlock(Properties props, VoxelShape shape, String modelDir, String modelName, String tag, boolean dynamicShape, TextureSet... textures);
     }
 
-    public static MetroBlockStateFactory getBlockFactory(ArrayList<HelperBase> helpersIn) {
-        return (props, shape, modelDir, modelName, tag, dynamicShape, textures) -> new MetroBlockDecorative(props, shape, modelDir, modelName, tag, SimpleUtils.containsType(helpersIn, OffsetHelper.class), textures) {
+    public static MetroBlockStateFactory getBlockFactory(HelperBase... helpersIn) {
+        return (props, shape, modelDir, modelName, tag, dynamicShape, textures) -> new MetroBlockDecorative(props, shape, modelDir, modelName, tag, SimpleUtils.containsType(OffsetHelper.class, helpersIn), textures) {
             @Override
             public ArrayList<HelperBase> getHelpers() {
-                return helpersIn;
+                return new ArrayList<>(Arrays.asList(helpersIn));
             }
         };
     }
@@ -82,10 +79,11 @@ public abstract class MetroBlockDecorative extends MetroBlockBase implements ITo
     public abstract ArrayList<HelperBase> getHelpers();
 
     public void setupHelpers(ArrayList<HelperBase> helpers) {
-        for (int i = 0; i < _helpers.size(); i++) {
+        for (int i = 0; i < helpers.size(); i++) {
             //stateHolder = _helpers.get(i).setDefaultState(stateHolder);
             assignHelper(helpers.get(i));
         }
+        _helpers = helpers;
     }
 
     public void assignHelper(HelperBase helper) {

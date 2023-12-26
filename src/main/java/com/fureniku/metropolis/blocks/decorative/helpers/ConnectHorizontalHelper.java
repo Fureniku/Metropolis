@@ -30,6 +30,7 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
     private boolean _checkDown = false;
     protected boolean _centerFourSided = false;
     protected boolean _independentModelsPerSide = false;
+    protected boolean _connectSolid = true;
 
     protected final String _connectedModelName;
     protected final String _itemModelName;
@@ -37,11 +38,12 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
     protected final BlockConnectionType _connectionType;
 
 
-    public ConnectHorizontalHelper(boolean checkUp, boolean checkDown, boolean centerFourSided, boolean independentModelsPerSide, String connectedModelName, String itemModelName, BlockConnectionType connectionType, VoxelShape[] shapes) {
+    public ConnectHorizontalHelper(boolean checkUp, boolean checkDown, boolean centerFourSided, boolean independentModelsPerSide, boolean connectSolid, String connectedModelName, String itemModelName, BlockConnectionType connectionType, VoxelShape[] shapes) {
         _checkUp = checkUp;
         _checkDown = checkDown;
         _centerFourSided = centerFourSided;
         _independentModelsPerSide = independentModelsPerSide;
+        _connectSolid = connectSolid;
         _connectedModelName = connectedModelName;
         _itemModelName = itemModelName;
         _shapeByIndex = shapes;
@@ -134,11 +136,8 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
         BlockState stateCheck = level.getBlockState(posToCheck);
         Block blockCheck = stateCheck.getBlock();
         BlockConnectionType type = _connectionType;
-        if (_connectionType.isSolid()) {
-            if (stateCheck.isFaceSturdy(level, posToCheck, dir.getOpposite())) {
-                return true;
-            }
-            type = _connectionType.getSolidType();
+        if (_connectSolid && stateCheck.isFaceSturdy(level, posToCheck, dir.getOpposite())) {
+            return true;
         }
 
         switch (type) {
@@ -152,27 +151,27 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
                     MetroBlockBase blockCheckMetro = (MetroBlockBase) blockCheck;
                     return blockMetro.getTag().equals(blockCheckMetro.getTag());
                 }
+                return false;
             case CONNECTING:
                 if (block instanceof MetroBlockBase && blockCheck instanceof MetroBlockBase) {
                     return ((MetroBlockBase) block).hasHelper(ConnectHorizontalHelper.class) && ((MetroBlockBase) blockCheck).hasHelper(ConnectHorizontalHelper.class);
                 }
+                return false;
             case METRO:
-                if (blockCheck instanceof MetroBlockDecorative && block instanceof MetroBlockDecorative) {
-                    return true;
-                }
-            case SOLID:
-                return stateCheck.isFaceSturdy(level, posToCheck, dir.getOpposite());
+                return blockCheck instanceof MetroBlockDecorative && block instanceof MetroBlockDecorative;
             case ALL:
                 return !(blockCheck instanceof AirBlock);
         }
         return false;
     }
 
+    //region Builder
     public static class Builder {
         private boolean _checkUp = false;
         private boolean _checkDown = false;
         private boolean _centerFourSided = false;
         private boolean _independentModelsPerSide = false;
+        private boolean _connectSolid = true;
 
         private String _connectedModelName;
         private String _itemModelName;
@@ -180,6 +179,23 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
         private VoxelShape[] _shapes;
 
         public Builder() {}
+
+        public Builder(Builder partial) {
+            _checkUp = partial._checkUp;
+            _checkDown = partial._checkDown;
+            _centerFourSided = partial._centerFourSided;
+            _independentModelsPerSide = partial._independentModelsPerSide;
+            _connectSolid = partial._connectSolid;
+            _connectedModelName = partial._connectedModelName;
+            _itemModelName = partial._itemModelName;
+            _connectionType = partial._connectionType;
+            _shapes = partial._shapes;
+        }
+
+        public Builder(BlockConnectionType connectionType, VoxelShape[] shapes) {
+            _connectionType = connectionType;
+            _shapes = shapes;
+        }
 
         public Builder setCheckUp() {
             _checkUp = true;
@@ -207,6 +223,12 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
             return this;
         }
 
+        //In most cases we DO want to connect solid, so we'll only explicitely state when not to.
+        public Builder setDontConnectSolid() {
+            _connectSolid = false;
+            return this;
+        }
+
         public Builder setConnectedModelName(String modelName) {
             _connectedModelName = modelName;
             return this;
@@ -228,8 +250,8 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
         }
 
         public ConnectHorizontalHelper build() {
-            return new ConnectHorizontalHelper(_checkUp, _checkDown, _centerFourSided, _independentModelsPerSide, _connectedModelName, _itemModelName, _connectionType, _shapes);
+            return new ConnectHorizontalHelper(_checkUp, _checkDown, _centerFourSided, _independentModelsPerSide, _connectSolid, _connectedModelName, _itemModelName, _connectionType, _shapes);
         }
-
     }
+    //endregion
 }

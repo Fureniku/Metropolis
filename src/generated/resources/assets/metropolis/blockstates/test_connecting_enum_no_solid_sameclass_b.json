@@ -2,12 +2,12 @@
   "multipart": [
     {
       "apply": {
-        "model": "metropolis:block/test_connecting_enum_solid_tag_a_standard"
+        "model": "metropolis:block/test_connecting_enum_no_solid_sameclass_b_standard"
       }
     },
     {
       "apply": {
-        "model": "metropolis:block/test_connecting_enum_solid_tag_a_connection",
+        "model": "metropolis:block/test_connecting_enum_no_solid_sameclass_b_connection",
         "uvlock": true
       },
       "when": {
@@ -16,7 +16,7 @@
     },
     {
       "apply": {
-        "model": "metropolis:block/test_connecting_enum_solid_tag_a_connection",
+        "model": "metropolis:block/test_connecting_enum_no_solid_sameclass_b_connection",
         "uvlock": true,
         "y": 180
       },
@@ -26,7 +26,7 @@
     },
     {
       "apply": {
-        "model": "metropolis:block/test_connecting_enum_solid_tag_a_connection",
+        "model": "metropolis:block/test_connecting_enum_no_solid_sameclass_b_connection",
         "uvlock": true,
         "y": 270
       },
@@ -36,7 +36,7 @@
     },
     {
       "apply": {
-        "model": "metropolis:block/test_connecting_enum_solid_tag_a_connection",
+        "model": "metropolis:block/test_connecting_enum_no_solid_sameclass_b_connection",
         "uvlock": true,
         "y": 90
       },

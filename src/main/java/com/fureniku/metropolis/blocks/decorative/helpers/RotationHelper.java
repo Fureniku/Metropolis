@@ -5,15 +5,12 @@ import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.HelperType;
 import com.fureniku.metropolis.utils.ShapeUtils;
-import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 

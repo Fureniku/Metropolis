@@ -1,9 +1,13 @@
 package com.fureniku.metropolis.blocks.decorative.builders;
 
 import com.fureniku.metropolis.blocks.decorative.*;
+import com.fureniku.metropolis.blocks.decorative.helpers.ConnectHorizontalHelper;
 import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
+import com.fureniku.metropolis.blocks.decorative.helpers.OffsetHelper;
 import com.fureniku.metropolis.datagen.TextureSet;
+import com.fureniku.metropolis.enums.BlockConnectionType;
 import com.fureniku.metropolis.enums.DecorativeBuilderType;
+import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -30,6 +34,17 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
     public MetroBlockDecorativeBuilder(BlockBehaviour.Properties props, DecorativeBuilderType type) {
         _props = props;
         _type = type;
+    }
+
+    public MetroBlockDecorativeBuilder(MetroBlockDecorativeBuilder partial) {
+        _props = partial._props;
+        _blockShape = partial._blockShape;
+        _modelDir = partial._modelDir;
+        _modelName = partial._modelName;
+        _tag = partial._tag;
+        _textures = partial._textures;
+        _type = partial._type;
+        _helpers = partial._helpers;
     }
 
     //region Normal shapes
@@ -78,6 +93,16 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
         return (T) this;
     }
 
+    public T setConnectHorizontalHelper(BlockConnectionType connectionType, VoxelShape[] shapes) {
+        _helpers.add(new ConnectHorizontalHelper.Builder(connectionType, shapes).build());
+        return (T) this;
+    }
+
+    //TODO
+    public T setConnectFullHelper() {
+        return (T) this;
+    }
+
     public T get() { return (T) this; }
     public BlockBehaviour.Properties getProps() { return _props; }
     public VoxelShape getShape() { return _blockShape; }
@@ -93,6 +118,8 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
      * @return The created block instance
      */
     public MetroBlockDecorative build() {
-        return new MetroBlockDecorative(_props, _blockShape, _modelDir, _modelName, _tag, _helpers, _textures);
+        HelperBase[] helpersArray = _helpers.toArray(new HelperBase[0]);
+        MetroBlockDecorative.MetroBlockStateFactory factory = MetroBlockDecorative.getBlockFactory(helpersArray);
+        return factory.makeBlock(_props, _blockShape, _modelDir, _modelName, _tag, SimpleUtils.containsType(OffsetHelper.class, helpersArray), _textures);
     }
 }

@@ -63,7 +63,7 @@ public class SimpleUtils {
      * @return whether an instance of that object exists in the list
      * @param <T>
      */
-    public static <T>boolean containsType(ArrayList<? extends T> list, Class<? extends T> type) {
+    public static <T>boolean containsType(Class<? extends T> type, T... list) {
         for (T obj : list) {
             if (type.isInstance(obj)) {
                 return true;
