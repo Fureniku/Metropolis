@@ -1,5 +1,7 @@
 package com.fureniku.metropolis;
 
+import com.fureniku.metropolis.blockentity.MetroBlockEntity;
+import com.fureniku.metropolis.test.BlockEntityTest;
 import com.fureniku.metropolis.test.RegistrationTest;
 import com.fureniku.metropolis.utils.CreativeTabSet;
 import com.fureniku.metropolis.utils.Debug;
@@ -8,6 +10,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -34,6 +37,7 @@ public abstract class RegistrationBase {
     protected final DeferredRegister<Block> blockRegistry;
     protected final DeferredRegister<Item> itemRegistry;
     protected final DeferredRegister<CreativeModeTab> creativeTabs;
+    protected static final DeferredRegister<BlockEntityType<?>> blockEntityRegistry = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Metropolis.MODID);
 
     /**
      * Used by registration groups
@@ -53,6 +57,7 @@ public abstract class RegistrationBase {
         blockRegistry = DeferredRegister.create(ForgeRegistries.BLOCKS, modid);
         itemRegistry = DeferredRegister.create(ForgeRegistries.ITEMS, modid);
         creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modid);
+        //blockEntityRegistry = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modid);
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::buildCreativeTabs);
@@ -63,6 +68,7 @@ public abstract class RegistrationBase {
         blockRegistry.register(modEventBus);
         itemRegistry.register(modEventBus);
         creativeTabs.register(modEventBus);
+        blockEntityRegistry.register(modEventBus);
     }
 
     /**
@@ -123,12 +129,7 @@ public abstract class RegistrationBase {
      * @return The passed name (to keep a list, if you want)
      */
     public String registerBlockSet(String name, Supplier<Block> blockClass) {
-        RegistryObject<Block> block = blockRegistry.register(name, blockClass);
-        RegistryObject<Item> blockItem = itemRegistry.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
-
-        addBlock(name, block);
-        addItem(name, blockItem);
-
+        retrieveRegisterBlockSet(name, blockClass);
         return name;
     }
 
@@ -146,6 +147,10 @@ public abstract class RegistrationBase {
         addBlock(name, block);
         addItem(name, blockItem);
         return block;
+    }
+
+    public <T extends MetroBlockEntity> RegistryObject<BlockEntityType<T>> registerBlockEntity(String name, BlockEntityType.BlockEntitySupplier<T> blockEntity, Block... validBlocks) {
+        return blockEntityRegistry.register(name, () -> BlockEntityType.Builder.of(blockEntity, validBlocks).build(null));
     }
 
     /**
@@ -222,6 +227,14 @@ public abstract class RegistrationBase {
      */
     public DeferredRegister<Item> getItemDeferredRegister() {
         return itemRegistry;
+    }
+
+    /**
+     * Getter for the block entity deferred register
+     * @return
+     */
+    public DeferredRegister<BlockEntityType<?>> getBlockEntityRegistry() {
+        return blockEntityRegistry;
     }
 
     /**

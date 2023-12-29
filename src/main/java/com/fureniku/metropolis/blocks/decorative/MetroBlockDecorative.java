@@ -1,6 +1,7 @@
 package com.fureniku.metropolis.blocks.decorative;
 
 import com.fureniku.metropolis.Metropolis;
+import com.fureniku.metropolis.blockentity.MetroEntityBlockDecorative;
 import com.fureniku.metropolis.blocks.IToggleable;
 import com.fureniku.metropolis.blocks.MetroBlockBase;
 import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
@@ -63,8 +64,8 @@ public abstract class MetroBlockDecorative extends MetroBlockBase implements ITo
     }
 
     @FunctionalInterface
-    public static interface MetroBlockStateFactory {
-        public MetroBlockDecorative makeBlock(Properties props, VoxelShape shape, String modelDir, String modelName, String tag, boolean dynamicShape, TextureSet... textures);
+    public interface MetroBlockStateFactory {
+        MetroBlockDecorative makeBlock(Properties props, VoxelShape shape, String modelDir, String modelName, String tag, boolean dynamicShape, TextureSet... textures);
     }
 
     public static MetroBlockStateFactory getBlockFactory(HelperBase... helpersIn) {

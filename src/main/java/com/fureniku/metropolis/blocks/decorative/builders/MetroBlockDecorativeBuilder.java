@@ -1,5 +1,7 @@
 package com.fureniku.metropolis.blocks.decorative.builders;
 
+import com.fureniku.metropolis.blockentity.MetroBlockEntity;
+import com.fureniku.metropolis.blockentity.MetroEntityBlockDecorative;
 import com.fureniku.metropolis.blocks.decorative.*;
 import com.fureniku.metropolis.blocks.decorative.helpers.ConnectHorizontalHelper;
 import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
@@ -10,6 +12,7 @@ import com.fureniku.metropolis.enums.DecorativeBuilderType;
 import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -26,6 +29,9 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
     protected TextureSet[] _textures = null;
     protected DecorativeBuilderType _type;
     protected ArrayList<HelperBase> _helpers = new ArrayList<>();
+
+    Class<? extends MetroBlockEntity> _blockEntityClass;
+    protected BlockEntityType<?> _blockEntityType;
 
     public MetroBlockDecorativeBuilder(BlockBehaviour.Properties props) {
         this(props, DecorativeBuilderType.DECORATIVE);
@@ -45,6 +51,9 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
         _textures = partial._textures;
         _type = partial._type;
         _helpers = partial._helpers;
+
+        _blockEntityClass = partial._blockEntityClass;
+        _blockEntityType = partial._blockEntityType;
     }
 
     //region Normal shapes
@@ -103,6 +112,12 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
         return (T) this;
     }
 
+    public T setBlockEntity(Class<? extends MetroBlockEntity> blockEntity, BlockEntityType<?> type) {
+        _blockEntityClass = blockEntity;
+        _blockEntityType = type;
+        return (T) this;
+    }
+
     public T get() { return (T) this; }
     public BlockBehaviour.Properties getProps() { return _props; }
     public VoxelShape getShape() { return _blockShape; }
@@ -121,5 +136,17 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBuilder<T
         HelperBase[] helpersArray = _helpers.toArray(new HelperBase[0]);
         MetroBlockDecorative.MetroBlockStateFactory factory = MetroBlockDecorative.getBlockFactory(helpersArray);
         return factory.makeBlock(_props, _blockShape, _modelDir, _modelName, _tag, SimpleUtils.containsType(OffsetHelper.class, helpersArray), _textures);
+    }
+
+    /**
+     * Build function for block entities. MUST call {@link MetroBlockDecorativeBuilder#setBlockEntity} to use this!
+     * @return
+     */
+    public MetroEntityBlockDecorative buildEntity() {
+        HelperBase[] helpersArray = _helpers.toArray(new HelperBase[0]);
+        MetroBlockDecorative.MetroBlockStateFactory factory = MetroBlockDecorative.getBlockFactory(helpersArray);
+        MetroEntityBlockDecorative mebd = (MetroEntityBlockDecorative) factory.makeBlock(_props, _blockShape, _modelDir, _modelName, _tag, SimpleUtils.containsType(OffsetHelper.class, helpersArray), _textures);
+        mebd.setBlockEntity(_blockEntityClass, _blockEntityType);
+        return mebd;
     }
 }
