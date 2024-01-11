@@ -8,7 +8,6 @@ import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBu
 import com.fureniku.metropolis.blocks.decorative.helpers.ConnectHorizontalHelper;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.enums.BlockConnectionType;
-import com.fureniku.metropolis.enums.DecorativeBuilderType;
 import com.fureniku.metropolis.utils.CreativeTabSet;
 import com.fureniku.metropolis.utils.ShapeUtils;
 import net.minecraft.data.DataGenerator;
@@ -54,31 +53,31 @@ public class RegistrationTest extends RegistrationBase {
         VoxelShape[] shapes = ShapeUtils.combineMultiShapes(shapeA, shapeB);
 
         //TODO re-test partials (not currently working)
-        MetroBlockDecorativeBuilder partial = new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL).setModelDirectory("blocks/decorative/");
+        MetroBlockDecorativeBuilder partial = new MetroBlockDecorativeBuilder(_props).setModelDirectory("blocks/decorative/");
 
         blockNames.add(registerBlockSet("test_connecting_enum_same", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setConnectHorizontalHelper(BlockConnectionType.SAME, shapes)
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_sameclass_a", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setConnectHorizontalHelper(BlockConnectionType.SAMECLASS, shapes)
                         .build())); //Not really a valid test
         blockNames.add(registerBlockSet("test_connecting_enum_sameclass_b", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setConnectHorizontalHelper(BlockConnectionType.SAMECLASS, shapes)
                         .build())); //Not really a valid test
         blockNames.add(registerBlockSet("test_connecting_enum_tag_a", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
@@ -86,7 +85,7 @@ public class RegistrationTest extends RegistrationBase {
                         .setTag("tag_a")
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_tag_b", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
@@ -94,42 +93,42 @@ public class RegistrationTest extends RegistrationBase {
                         .setTag("tag_b")
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_connecting", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setConnectHorizontalHelper(BlockConnectionType.CONNECTING, shapes)
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_metro", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setConnectHorizontalHelper(BlockConnectionType.METRO, shapes)
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_no_solid_same", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setHelpers(new ConnectHorizontalHelper.Builder(BlockConnectionType.SAME, shapes).setDontConnectSolid().build())
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_no_solid_sameclass_a", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setHelpers(new ConnectHorizontalHelper.Builder(BlockConnectionType.SAMECLASS, shapes).setDontConnectSolid().build())
                         .build())); //Not really a valid test
         blockNames.add(registerBlockSet("test_connecting_enum_no_solid_sameclass_b", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setHelpers(new ConnectHorizontalHelper.Builder(BlockConnectionType.SAMECLASS, shapes).setDontConnectSolid().build())
                         .build())); //Not really a valid test
         blockNames.add(registerBlockSet("test_connecting_enum_no_solid_tag_a", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
@@ -137,7 +136,7 @@ public class RegistrationTest extends RegistrationBase {
                         .setTag("tag_a")
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_no_solid_tag_b", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
@@ -145,21 +144,21 @@ public class RegistrationTest extends RegistrationBase {
                         .setTag("tag_b")
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_no_solid_conecting", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setHelpers(new ConnectHorizontalHelper.Builder(BlockConnectionType.CONNECTING, shapes).setDontConnectSolid().build())
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_no_solid_metro", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setHelpers(new ConnectHorizontalHelper.Builder(BlockConnectionType.METRO, shapes).setDontConnectSolid().build())
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_all", () ->
-                new MetroBlockDecorativeBuilder<MetroEntityBlockDecorative>(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder<MetroEntityBlockDecorative>(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
@@ -176,7 +175,7 @@ public class RegistrationTest extends RegistrationBase {
                         .buildEntity());*/
 
         TEST_BLOCK_ENTITY_DECORATIVE_ENTITY = registerBlockEntityWithBlock("test_block_entity_decorative", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE)
+                new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)

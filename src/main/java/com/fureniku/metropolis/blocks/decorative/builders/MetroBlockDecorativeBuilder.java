@@ -6,7 +6,6 @@ import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
 import com.fureniku.metropolis.blocks.decorative.helpers.OffsetHelper;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockConnectionType;
-import com.fureniku.metropolis.enums.DecorativeBuilderType;
 import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -24,16 +23,10 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBase> {
     protected String _modelName = null;
     protected String _tag = "untagged";
     protected TextureSet[] _textures = null;
-    protected DecorativeBuilderType _type;
     protected ArrayList<HelperBase> _helpers = new ArrayList<>();
 
     public MetroBlockDecorativeBuilder(BlockBehaviour.Properties props) {
-        this(props, DecorativeBuilderType.DECORATIVE);
-    }
-
-    public MetroBlockDecorativeBuilder(BlockBehaviour.Properties props, DecorativeBuilderType type) {
         _props = props;
-        _type = type;
     }
 
     public MetroBlockDecorativeBuilder(MetroBlockDecorativeBuilder partial) {
@@ -43,7 +36,6 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBase> {
         _modelName = partial._modelName;
         _tag = partial._tag;
         _textures = partial._textures;
-        _type = partial._type;
         _helpers = partial._helpers;
     }
 
@@ -90,6 +82,11 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBase> {
 
     public MetroBlockDecorativeBuilder setHelpers(HelperBase... helpers) {
         _helpers.addAll(Arrays.asList(helpers));
+        return this;
+    }
+
+    public MetroBlockDecorativeBuilder addHelper(HelperBase helper) {
+        _helpers.add(helper);
         return this;
     }
 

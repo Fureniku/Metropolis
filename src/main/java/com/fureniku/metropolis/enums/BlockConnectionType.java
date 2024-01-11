@@ -1,6 +1,6 @@
 package com.fureniku.metropolis.enums;
 
-import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorative;
+import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeBase;
 import com.fureniku.metropolis.blocks.decorative.helpers.ConnectHorizontalHelper;
 
 /**
@@ -35,7 +35,7 @@ public enum BlockConnectionType {
     CONNECTING,
 
     /**
-     * Connect to any block that extends {@link MetroBlockDecorative}
+     * Connect to any block that extends {@link MetroBlockDecorativeBase}
      */
     METRO,
 
