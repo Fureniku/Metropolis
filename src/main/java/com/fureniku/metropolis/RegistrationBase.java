@@ -37,7 +37,7 @@ public abstract class RegistrationBase {
     protected final DeferredRegister<Block> blockRegistry;
     protected final DeferredRegister<Item> itemRegistry;
     protected final DeferredRegister<CreativeModeTab> creativeTabs;
-    protected static final DeferredRegister<BlockEntityType<?>> blockEntityRegistry = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Metropolis.MODID);
+    protected final DeferredRegister<BlockEntityType<?>> blockEntityRegistry;
 
     /**
      * Used by registration groups
@@ -57,7 +57,7 @@ public abstract class RegistrationBase {
         blockRegistry = DeferredRegister.create(ForgeRegistries.BLOCKS, modid);
         itemRegistry = DeferredRegister.create(ForgeRegistries.ITEMS, modid);
         creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modid);
-        //blockEntityRegistry = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modid);
+        blockEntityRegistry = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modid);
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::buildCreativeTabs);
@@ -151,6 +151,16 @@ public abstract class RegistrationBase {
 
     public <T extends MetroBlockEntity> RegistryObject<BlockEntityType<T>> registerBlockEntity(String name, BlockEntityType.BlockEntitySupplier<T> blockEntity, Block... validBlocks) {
         return blockEntityRegistry.register(name, () -> BlockEntityType.Builder.of(blockEntity, validBlocks).build(null));
+    }
+
+    public <T extends MetroBlockEntity> RegistryObject<BlockEntityType<T>> registerBlockEntityWithBlock(String name, Supplier<Block> blockClass, BlockEntityType.BlockEntitySupplier<T> blockEntity) {
+        RegistryObject<Block> block = blockRegistry.register(name, blockClass);
+        RegistryObject<Item> blockItem = itemRegistry.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+
+        addBlock(name, block);
+        addItem(name, blockItem);
+
+        return blockEntityRegistry.register(name + "_entity", () -> BlockEntityType.Builder.of(blockEntity, block.get()).build(null));
     }
 
     /**

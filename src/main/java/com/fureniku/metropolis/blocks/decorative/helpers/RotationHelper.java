@@ -1,6 +1,6 @@
 package com.fureniku.metropolis.blocks.decorative.helpers;
 
-import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorative;
+import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeBase;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.HelperType;
@@ -22,7 +22,7 @@ public class RotationHelper extends HelperBlockstate {
     private final VoxelShape BLOCK_SHAPE_SOUTH;
     private final VoxelShape BLOCK_SHAPE_WEST;
 
-    public RotationHelper(VoxelShape shape, MetroBlockDecorative block) {
+    public RotationHelper(VoxelShape shape, MetroBlockDecorativeBase block) {
         BLOCK_SHAPE_NORTH = shape;
         BLOCK_SHAPE_EAST = ShapeUtils.rotateVoxelShape(shape, Direction.EAST);
         BLOCK_SHAPE_SOUTH = ShapeUtils.rotateVoxelShape(shape, Direction.SOUTH);

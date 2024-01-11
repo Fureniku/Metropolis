@@ -3,26 +3,18 @@ package com.fureniku.metropolis.test;
 import com.fureniku.metropolis.Metropolis;
 import com.fureniku.metropolis.RegistrationBase;
 import com.fureniku.metropolis.blockentity.MetroBlockEntity;
-import com.fureniku.metropolis.blocks.MetroBlockBase;
-import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorative;
+import com.fureniku.metropolis.blocks.decorative.MetroEntityBlockDecorative;
 import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
 import com.fureniku.metropolis.blocks.decorative.helpers.ConnectHorizontalHelper;
-import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
-import com.fureniku.metropolis.blocks.decorative.helpers.OffsetHelper;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
-import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockConnectionType;
 import com.fureniku.metropolis.enums.DecorativeBuilderType;
 import com.fureniku.metropolis.utils.CreativeTabSet;
 import com.fureniku.metropolis.utils.ShapeUtils;
-import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -52,6 +44,8 @@ public class RegistrationTest extends RegistrationBase {
     BlockBehaviour.Properties _props = BlockBehaviour.Properties.of().strength(1.0f).sound(SoundType.STONE);
     ResourceLocation TEST_TEXTURE_1 = new ResourceLocation(Metropolis.MODID, "block/test_texture_1");
     ResourceLocation TEST_TEXTURE_2 = new ResourceLocation(Metropolis.MODID, "block/test_texture_2");
+
+    public RegistryObject<BlockEntityType<MetroBlockEntity>> TEST_BLOCK_ENTITY_DECORATIVE_ENTITY;
 
     @Override
     public void init(IEventBus modEventBus) {
@@ -165,33 +159,31 @@ public class RegistrationTest extends RegistrationBase {
                         .setHelpers(new ConnectHorizontalHelper.Builder(BlockConnectionType.METRO, shapes).setDontConnectSolid().build())
                         .build()));
         blockNames.add(registerBlockSet("test_connecting_enum_all", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
+                new MetroBlockDecorativeBuilder<MetroEntityBlockDecorative>(_props, DecorativeBuilderType.DECORATIVE_CONNECT_HORIZONTAL)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
                         .setConnectHorizontalHelper(BlockConnectionType.ALL, shapes)
                         .build()));
 
-        blockNames.add(registerBlockSet("test_block_entity_decorative", () ->
+
+        blockNames.add("test_block_entity_decorative");
+        /*RegistryObject<Block> blockEntity = retrieveRegisterBlockSet("test_block_entity_decorative", () ->
                 new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
-                        .setBlockEntity()
-                        .buildEntity()));
+                        .buildEntity());*/
+
+        TEST_BLOCK_ENTITY_DECORATIVE_ENTITY = registerBlockEntityWithBlock("test_block_entity_decorative", () ->
+                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE)
+                        .setModelDirectory("blocks/decorative/")
+                        .setModelName("barrier_concrete_middle")
+                        .setTextures(TEST_TEXTURE_1)
+                        .setConnectHorizontalHelper(BlockConnectionType.ALL, shapes)
+                        .build(), MetroBlockEntity::new);//Metropolis.registrationTest.getBlock("test_block_entity_decorative").get())
 
         _testTab = new CreativeTabSet(getCreativeTabDeferredRegister(), "tab_test", getItem(blockNames.get(0)));
-
-        //other code...
-        registerBlockEntity("test_block_entity_decorative", MetroBlockEntity::new, getBlock("test_block_entity_decorative").get());
-    }
-
-    public static final RegistryObject<BlockEntityType<MetroBlockEntity>> NEXUS_BLOCK_ENTITY = registerBlockEntity2("nexus", MetroBlockEntity::new, Blocks.STONE);
-
-
-
-    public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerBlockEntity2(String name, BlockEntityType.BlockEntitySupplier<T> factory, Block block) {
-        return BETYPES.register(name, () -> BlockEntityType.Builder.of(factory, block.get()).build(null));
     }
 
     @Override

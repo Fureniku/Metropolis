@@ -1,7 +1,7 @@
 package com.fureniku.metropolis.blocks.decorative.helpers;
 
 import com.fureniku.metropolis.blocks.MetroBlockBase;
-import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorative;
+import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeBase;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.BlockConnectionType;
@@ -103,7 +103,7 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
         return ShapeUtils.getShapeAtIndex(state, _shapeByIndex);
     }
 
-    public void neighbourChanged(BlockState state, Level level, BlockPos pos, MetroBlockDecorative block) {
+    public void neighbourChanged(BlockState state, Level level, BlockPos pos, MetroBlockDecorativeBase block) {
         BlockState newState = checkNewState(level, state, pos, block);
         if (newState != state) {
             block.setBlock(level, pos, newState);
@@ -158,7 +158,7 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
                 }
                 return false;
             case METRO:
-                return blockCheck instanceof MetroBlockDecorative && block instanceof MetroBlockDecorative;
+                return blockCheck instanceof MetroBlockDecorativeBase && block instanceof MetroBlockDecorativeBase;
             case ALL:
                 return !(blockCheck instanceof AirBlock);
         }

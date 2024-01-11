@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntityTest extends MetroBlockEntity {
 
-    public BlockEntityTest(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntityTest(BlockPos pos, BlockState state) {
+        super(pos, state);
     }
 }

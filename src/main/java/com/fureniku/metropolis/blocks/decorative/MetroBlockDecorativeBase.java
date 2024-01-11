@@ -1,30 +1,21 @@
 package com.fureniku.metropolis.blocks.decorative;
 
-import com.fureniku.metropolis.Metropolis;
-import com.fureniku.metropolis.blockentity.MetroEntityBlockDecorative;
 import com.fureniku.metropolis.blocks.IToggleable;
 import com.fureniku.metropolis.blocks.MetroBlockBase;
-import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
 import com.fureniku.metropolis.blocks.decorative.helpers.*;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
-import com.fureniku.metropolis.enums.BlockOffsetDirection;
-import com.fureniku.metropolis.enums.ToggleType;
 import com.fureniku.metropolis.utils.Debug;
 import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.StateHolder;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
@@ -34,42 +25,41 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
-public abstract class MetroBlockDecorative extends MetroBlockBase implements IToggleable {
+/**
+ * All children of this need to be abstract, in order for the helper system to work.
+ * Abstract classes are made using MetroBlockDecorativeBuilder{@literal <ClassName>}.build()
+ */
+public abstract class MetroBlockDecorativeBase extends MetroBlockBase implements IToggleable {
 
     private final VoxelShape BLOCK_SHAPE;
     protected TextureSet[] _resources;
     protected String _modelName;
     protected String _modelDir;
 
-    private RotationHelper _rotationHelper;
-    private ToggleHelper _toggleHelper;
-    private ConnectHorizontalHelper _connectHorizontalHelper;
-    private OffsetHelper _offsetHelper;
+    protected RotationHelper _rotationHelper;
+    protected ToggleHelper _toggleHelper;
+    protected ConnectHorizontalHelper _connectHorizontalHelper;
+    protected OffsetHelper _offsetHelper;
 
-    private boolean _baseInitialized = false;
-
-    public MetroBlockDecorative(Properties props, VoxelShape shape, String modelDir, String modelName, String tag, boolean dynamicShape, TextureSet... textures) {
+    public MetroBlockDecorativeBase(Properties props, VoxelShape shape, String modelDir, String modelName, String tag, boolean dynamicShape, TextureSet... textures) {
         super(dynamicShape ? props.dynamicShape() : props);
         setupHelpers(getHelpers());
-        _baseInitialized = true;
         BLOCK_SHAPE = shape != null ? shape : Block.box(0, 0, 0, 16, 16, 16);
         _resources = textures;
         _modelDir = modelDir;
         _modelName = modelName;
-
-        //BlockState stateHolder = ;
         setTag(tag);
 
         this.registerDefaultState(this.getStateDefinition().any().setValue(ConnectHorizontalHelper.NORTH, false).setValue(ConnectHorizontalHelper.EAST, false).setValue(ConnectHorizontalHelper.SOUTH, false).setValue(ConnectHorizontalHelper.WEST, false));
     }
 
     @FunctionalInterface
-    public interface MetroBlockStateFactory {
-        MetroBlockDecorative makeBlock(Properties props, VoxelShape shape, String modelDir, String modelName, String tag, boolean dynamicShape, TextureSet... textures);
+    public interface MetroBlockStateFactory<T> {
+        T makeBlock(Properties props, VoxelShape shape, String modelDir, String modelName, String tag, boolean dynamicShape, TextureSet... textures);
     }
 
     public static MetroBlockStateFactory getBlockFactory(HelperBase... helpersIn) {
-        return (props, shape, modelDir, modelName, tag, dynamicShape, textures) -> new MetroBlockDecorative(props, shape, modelDir, modelName, tag, SimpleUtils.containsType(OffsetHelper.class, helpersIn), textures) {
+        return (props, shape, modelDir, modelName, tag, dynamicShape, textures) -> new MetroEntityBlockDecorative(props, shape, modelDir, modelName, tag, SimpleUtils.containsType(OffsetHelper.class, helpersIn), textures) {
             @Override
             public ArrayList<HelperBase> getHelpers() {
                 return new ArrayList<>(Arrays.asList(helpersIn));
@@ -81,7 +71,6 @@ public abstract class MetroBlockDecorative extends MetroBlockBase implements ITo
 
     public void setupHelpers(ArrayList<HelperBase> helpers) {
         for (int i = 0; i < helpers.size(); i++) {
-            //stateHolder = _helpers.get(i).setDefaultState(stateHolder);
             assignHelper(helpers.get(i));
         }
         _helpers = helpers;

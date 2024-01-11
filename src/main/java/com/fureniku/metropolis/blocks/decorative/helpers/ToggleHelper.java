@@ -1,6 +1,6 @@
 package com.fureniku.metropolis.blocks.decorative.helpers;
 
-import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorative;
+import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeBase;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.HelperType;
@@ -74,13 +74,13 @@ public class ToggleHelper extends HelperBlockstate {
         BLOCK_SHAPE_TOGGLED_WEST = ShapeUtils.rotateVoxelShape(BLOCK_SHAPE_TOGGLED, Direction.WEST);
     }
 
-    public void neighbourChanged(BlockState state, Level level, BlockPos pos, MetroBlockDecorative block) {
+    public void neighbourChanged(BlockState state, Level level, BlockPos pos, MetroBlockDecorativeBase block) {
         if (!level.isClientSide && (_type == ToggleType.REDSTONE || _type == ToggleType.REDSTONE_INTERACT)) {
             block.setToggledState(level, pos, state, level.hasNeighborSignal(pos));
         }
     }
 
-    public void rightClick(BlockState state, BlockPos pos, Player player, MetroBlockDecorative block) {
+    public void rightClick(BlockState state, BlockPos pos, Player player, MetroBlockDecorativeBase block) {
         switch (_type) {
             case REDSTONE_INTERACT:
             case INTERACT:
