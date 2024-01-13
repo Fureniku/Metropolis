@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 public abstract class HelperBlockstate extends HelperBase {
 
-    public abstract void generateBlockstate(TextureSet[] resources, String modelDir, String modelName, Block block, MetroBlockStateProvider blockStateProvider);
+    public abstract void generateBlockState(TextureSet[] resources, String modelDir, String modelName, Block block, MetroBlockStateProvider blockStateProvider);
     public abstract BlockState getPlacementState(BlockPlaceContext context, BlockState currentState, Block block);
     public abstract StateDefinition.Builder<Block, BlockState> addDefaultState(StateDefinition.Builder<Block, BlockState> builder);
 

@@ -43,14 +43,18 @@ public abstract class MetroBlockDecorativeBase extends MetroBlockBase implements
 
     public MetroBlockDecorativeBase(Properties props, VoxelShape shape, String modelDir, String modelName, String tag, boolean dynamicShape, TextureSet... textures) {
         super(dynamicShape ? props.dynamicShape() : props);
-        setupHelpers(getHelpers());
         BLOCK_SHAPE = shape != null ? shape : Block.box(0, 0, 0, 16, 16, 16);
         _resources = textures;
         _modelDir = modelDir;
         _modelName = modelName;
         setTag(tag);
 
-        this.registerDefaultState(this.getStateDefinition().any().setValue(ConnectHorizontalHelper.NORTH, false).setValue(ConnectHorizontalHelper.EAST, false).setValue(ConnectHorizontalHelper.SOUTH, false).setValue(ConnectHorizontalHelper.WEST, false));
+        BlockState defaultState = this.getStateDefinition().any();
+        for (int i = 0; i < _helpers.size(); i++) {
+            defaultState = _helpers.get(i).setDefaultState(defaultState);
+        }
+
+        this.registerDefaultState(defaultState);
     }
 
     @FunctionalInterface
@@ -90,11 +94,16 @@ public abstract class MetroBlockDecorativeBase extends MetroBlockBase implements
 
     @Override
     protected void createBlockState(StateDefinition.Builder<Block, BlockState> builder) {
-        for (int i = 0; i < _helpers.size(); i++) {
-            HelperBase helper = _helpers.get(i);
-            if (helper instanceof HelperBlockstate) {
-                builder = ((HelperBlockstate) helper).addDefaultState(builder);
+        setupHelpers(getHelpers());
+        if (_helpers != null) {
+            for (int i = 0; i < _helpers.size(); i++) {
+                HelperBase helper = _helpers.get(i);
+                if (helper instanceof HelperBlockstate) {
+                    builder = ((HelperBlockstate) helper).addDefaultState(builder);
+                }
             }
+        } else {
+            Debug.LogError("Helpers array still null after setup. Blockstates will not work.");
         }
     }
 
@@ -133,26 +142,42 @@ public abstract class MetroBlockDecorativeBase extends MetroBlockBase implements
     public void generateBlockState(RegistryObject<Block> blockRegistryObject, MetroBlockStateProvider blockStateProvider) {
         Block block = blockRegistryObject.get();
         BlockModelBuilder bmb = blockStateProvider.prepareModels(block, _modelDir, _modelName, _resources);
-        boolean generatedBlock = false;
 
         if (_helpers.size() == 1) {
             //Easy approach - just use the helper's blockstate generator
             if (_helpers.get(0) instanceof HelperBlockstate) {
-                ((HelperBlockstate) _helpers.get(0)).generateBlockstate(_resources, _modelDir, _modelName, block, blockStateProvider);
-                generatedBlock = true;
+                ((HelperBlockstate) _helpers.get(0)).generateBlockState(_resources, _modelDir, _modelName, block, blockStateProvider);
+                return;
             }
         } else {
-            //Combine multiple generators, ree
-            //connect horizontal + rotate
-            //connect horizontal + toggle
-            //connect horizontal + rotate + toggle
-            //rotate + toggle
+            if (_rotationHelper != null && _connectHorizontalHelper != null) {
+                //replace with a new subhelper which generates the rotated connecting shapes on construction
+                //return shape;
+            }
+
+            if (_toggleHelper != null) {
+                if (_rotationHelper != null) {
+                    _toggleHelper.generateBlockStateRotatable(_resources, _modelDir, _modelName, block, blockStateProvider);
+                } else {
+                    _toggleHelper.generateBlockState(_resources, _modelDir, _modelName, block, blockStateProvider);
+                }
+                return;
+            }
+
+            if (_rotationHelper != null) {
+                _rotationHelper.generateBlockState(_resources, _modelDir, _modelName, block, blockStateProvider);
+                return;
+            }
+
+            if (_connectHorizontalHelper != null) {
+                _connectHorizontalHelper.generateBlockState(_resources, _modelDir, _modelName, block, blockStateProvider);
+                return;
+            }
         }
 
-        if (!generatedBlock) {
-            blockStateProvider.simpleBlock(block, bmb);
-            blockStateProvider.simpleBlockItem(block, bmb);
-        }
+        //Fallback to generic blocks
+        blockStateProvider.simpleBlock(block, bmb);
+        blockStateProvider.simpleBlockItem(block, bmb);
     }
 
     //region Offset

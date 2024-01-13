@@ -71,7 +71,7 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
     }
 
     @Override
-    public void generateBlockstate(TextureSet[] resources, String modelDir, String modelName, Block block, MetroBlockStateProvider blockStateProvider) {
+    public void generateBlockState(TextureSet[] resources, String modelDir, String modelName, Block block, MetroBlockStateProvider blockStateProvider) {
         String connectedName = _connectedModelName != null ? _connectedModelName : modelName + "_connection";
         String itemName = _itemModelName != null ? _itemModelName : modelName;
         BlockModelBuilder modelItem = blockStateProvider.getModelFilesWithTexture(block, "_standard", modelDir + itemName, resources[0].getTexture());

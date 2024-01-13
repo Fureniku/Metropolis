@@ -23,11 +23,20 @@ public class RotationHelper extends HelperBlockstate {
     private final VoxelShape BLOCK_SHAPE_SOUTH;
     private final VoxelShape BLOCK_SHAPE_WEST;
 
-    public RotationHelper(VoxelShape shape, MetroBlockDecorativeBase block) {
+    public RotationHelper(VoxelShape shape) {
         BLOCK_SHAPE_NORTH = shape;
         BLOCK_SHAPE_EAST = ShapeUtils.rotateVoxelShape(shape, Direction.EAST);
         BLOCK_SHAPE_SOUTH = ShapeUtils.rotateVoxelShape(shape, Direction.SOUTH);
         BLOCK_SHAPE_WEST = ShapeUtils.rotateVoxelShape(shape, Direction.WEST);
+    }
+
+    //Constructor for toggleable and rotating blocks. The toggle helper will handle the blcokshapes.
+    //Still have to set the final voxelshapes, but theyre never used.
+    public RotationHelper() {
+        BLOCK_SHAPE_NORTH = Block.box(0, 0, 0, 0, 0, 0);
+        BLOCK_SHAPE_EAST = BLOCK_SHAPE_NORTH;
+        BLOCK_SHAPE_SOUTH = BLOCK_SHAPE_NORTH;
+        BLOCK_SHAPE_WEST = BLOCK_SHAPE_NORTH;
     }
 
     @Override
@@ -47,7 +56,7 @@ public class RotationHelper extends HelperBlockstate {
     }
 
     @Override
-    public void generateBlockstate(TextureSet[] resources, String modelDir, String modelName, Block block, MetroBlockStateProvider blockStateProvider) {
+    public void generateBlockState(TextureSet[] resources, String modelDir, String modelName, Block block, MetroBlockStateProvider blockStateProvider) {
         BlockModelBuilder bmb = blockStateProvider.prepareModels(block, modelDir, modelName, resources);
         blockStateProvider.horizontalBlock(block, bmb);
     }

@@ -112,7 +112,7 @@ public class ToggleHelper extends HelperBlockstate {
     }
 
     @Override
-    public void generateBlockstate(TextureSet[] resources, String modelDir, String modelName, Block block, MetroBlockStateProvider blockStateProvider) {
+    public void generateBlockState(TextureSet[] resources, String modelDir, String modelName, Block block, MetroBlockStateProvider blockStateProvider) {
         BlockModelBuilder modelNormal = blockStateProvider.prepareModels(block, "_standard", modelDir, modelName, resources);
         BlockModelBuilder modelToggled = blockStateProvider.prepareModels(block, "_toggled", modelDir, _toggledModelName, resources);
 

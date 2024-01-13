@@ -10,6 +10,7 @@ import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBase> {
     public MetroBlockDecorativeBuilder setHeight(float height) { return setShape(16, height, 16); }
     public MetroBlockDecorativeBuilder setWidth(float width) { return setShape(width, 16, width); }
     public MetroBlockDecorativeBuilder setShape(float width, float height) { return setShape(width, height, width); }
+    public MetroBlockDecorativeBuilder setShape(Vec3 size) { return setShape((float) size.x, (float) size.y, (float) size.z); }
 
     public MetroBlockDecorativeBuilder setShape(float width, float height, float depth) {
         float insetX = (16-width)/2;

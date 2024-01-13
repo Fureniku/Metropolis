@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -15,6 +16,10 @@ public class ShapeUtils {
 
     public static VoxelShape makeShape(float size, float height) {
         return Block.box(size, 0, size, 16-size, height, 16-size);
+    }
+
+    public static VoxelShape makeShape(Vec3 shape) {
+        return Block.box(shape.x, 0, shape.z, 16-shape.x, shape.y, 16-shape.z);
     }
 
     /**
