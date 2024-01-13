@@ -90,11 +90,12 @@ public abstract class MetroBlockDecorativeBase extends MetroBlockBase implements
 
     @Override
     protected void createBlockState(StateDefinition.Builder<Block, BlockState> builder) {
-        Debug.Log("[1234] create blockstate");
-        /*if (_toggleHelper != null) builder.add(_toggleHelper.TOGGLED);
-        if (_rotationHelper != null) builder.add(_rotationHelper.DIRECTION);
-        if (_connectHorizontalHelper != null) */
-        builder.add(ConnectHorizontalHelper.NORTH, ConnectHorizontalHelper.EAST, ConnectHorizontalHelper.SOUTH, ConnectHorizontalHelper.WEST);
+        for (int i = 0; i < _helpers.size(); i++) {
+            HelperBase helper = _helpers.get(i);
+            if (helper instanceof HelperBlockstate) {
+                builder = ((HelperBlockstate) helper).addDefaultState(builder);
+            }
+        }
     }
 
     @Override

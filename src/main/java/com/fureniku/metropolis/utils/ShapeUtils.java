@@ -13,6 +13,10 @@ public class ShapeUtils {
 
     private static final Object2IntMap<BlockState> stateToIndex = new Object2IntOpenHashMap<>();
 
+    public static VoxelShape makeShape(float size, float height) {
+        return Block.box(size, 0, size, 16-size, height, 16-size);
+    }
+
     /**
      * Create an array of voxelshapes for a non-standard shaped collider. Simple constructor for very simple uniform custom shapes
      * @param size The expanding point from the center for each segment of the block (e.g. 2 will make a segment 4 wide)

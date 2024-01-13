@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -58,6 +59,15 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
     @Override
     public HelperType getType() {
         return HelperType.CONNECTION_HORIZONTAL;
+    }
+
+    @Override
+    public StateDefinition.Builder<Block, BlockState> addDefaultState(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(NORTH);
+        builder.add(EAST);
+        builder.add(SOUTH);
+        builder.add(WEST);
+        return builder;
     }
 
     @Override

@@ -16,6 +16,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -57,6 +58,12 @@ public class ToggleHelper extends HelperBlockstate {
     public BlockState setDefaultState(BlockState state) {
         state.setValue(TOGGLED, false);
         return state;
+    }
+
+    @Override
+    public StateDefinition.Builder<Block, BlockState> addDefaultState(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(TOGGLED);
+        return builder;
     }
 
     @Override
