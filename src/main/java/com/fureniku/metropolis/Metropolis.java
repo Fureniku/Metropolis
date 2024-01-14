@@ -17,7 +17,7 @@ public class Metropolis {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static Metropolis INSTANCE;
 
-    public static final boolean ENABLE_DEBUG = true; // For testing metropolis stuff internally. Should be disabled on release.
+    public static final boolean ENABLE_DEBUG = false; // For testing metropolis stuff internally. Should be disabled on release.
     public static RegistrationTest registrationTest;
 
     public Metropolis() {

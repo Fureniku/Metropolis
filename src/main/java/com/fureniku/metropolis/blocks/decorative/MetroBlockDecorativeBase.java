@@ -119,7 +119,7 @@ public abstract class MetroBlockDecorativeBase extends MetroBlockBase implements
     @Override
     protected VoxelShape getShapeFromBlockState(BlockState state) {
         if (_rotationHelper != null && _connectHorizontalHelper != null) {
-            //replace with a new subhelper which generates the rotated connecting shapes on construction
+            //TODO replace with a new subhelper which generates the rotated connecting shapes on construction
             //return shape;
         }
 

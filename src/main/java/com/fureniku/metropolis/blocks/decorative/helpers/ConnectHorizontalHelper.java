@@ -130,23 +130,23 @@ public class ConnectHorizontalHelper extends HelperBlockstate {
 
     private boolean checkMatchOnSide(Level level, BlockPos posToCheck, Block block, Direction dir) {
         if (_checkUp) {
-            if (checkMatch(level, posToCheck.above(), block, dir)) {
+            if (checkMatch(level, posToCheck.above(), block, dir, false)) {
                 return true;
             }
         }
         if (_checkDown) {
-            if (checkMatch(level, posToCheck.below(), block, dir)) {
+            if (checkMatch(level, posToCheck.below(), block, dir, false)) {
                 return true;
             }
         }
-        return checkMatch(level, posToCheck, block, dir);
+        return checkMatch(level, posToCheck, block, dir, _connectSolid);
     }
 
-    private boolean checkMatch(Level level, BlockPos posToCheck, Block block, Direction dir) {
+    private boolean checkMatch(Level level, BlockPos posToCheck, Block block, Direction dir, boolean checkSolid) {
         BlockState stateCheck = level.getBlockState(posToCheck);
         Block blockCheck = stateCheck.getBlock();
         BlockConnectionType type = _connectionType;
-        if (_connectSolid && stateCheck.isFaceSturdy(level, posToCheck, dir.getOpposite())) {
+        if (checkSolid && stateCheck.isFaceSturdy(level, posToCheck, dir.getOpposite())) {
             return true;
         }
 

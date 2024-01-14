@@ -19,7 +19,9 @@ public class ShapeUtils {
     }
 
     public static VoxelShape makeShape(Vec3 shape) {
-        return Block.box(shape.x, 0, shape.z, 16-shape.x, shape.y, 16-shape.z);
+        double x = shape.x/2;
+        double z = shape.z/2;
+        return Block.box(8-x, 0, 8-z, 8+x, shape.y, 8+z);
     }
 
     /**

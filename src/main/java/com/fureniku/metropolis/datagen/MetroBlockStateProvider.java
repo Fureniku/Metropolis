@@ -147,9 +147,9 @@ public class MetroBlockStateProvider extends BlockStateProvider {
     public BlockModelBuilder prepareModels(Block block, String nameSuffix, String modelDir, String modelName, TextureSet[] resources) {
         BlockModelBuilder bmb;
         if (modelName == null || resources == null) {
-            bmb = getModelFilesWithTexture(block, "", modelDir + block.getName(), modLoc(modelDir + block.getName()));
+            bmb = getModelFilesWithTexture(block, nameSuffix, modelDir + block.getName(), modLoc(modelDir + block.getName()));
         } else {
-            bmb = applyTexturesToModel(resources, getModelFilesWithTexture(block, "", modelDir + modelName, resources[0].getTexture()));
+            bmb = applyTexturesToModel(resources, getModelFilesWithTexture(block, nameSuffix, modelDir + modelName, resources[0].getTexture()));
             if (resources.length > 1) {
                 for (int i = 1; i < resources.length; i++) {
                     bmb = bmb.texture(resources[i].getKey(), resources[i].getTexture());

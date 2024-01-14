@@ -52,9 +52,6 @@ public class RegistrationTest extends RegistrationBase {
         VoxelShape[] shapeB = ShapeUtils.makeShapes(2.5f, 4f, 16f);
         VoxelShape[] shapes = ShapeUtils.combineMultiShapes(shapeA, shapeB);
 
-        //TODO re-test partials (not currently working)
-        MetroBlockDecorativeBuilder partial = new MetroBlockDecorativeBuilder(_props).setModelDirectory("blocks/decorative/");
-
         blockNames.add(registerBlockSet("test_connecting_enum_same", () ->
                 new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
