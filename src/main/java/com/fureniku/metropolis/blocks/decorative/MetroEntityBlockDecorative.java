@@ -2,9 +2,11 @@ package com.fureniku.metropolis.blocks.decorative;
 
 import com.fureniku.metropolis.blockentity.MetroBlockEntity;
 import com.fureniku.metropolis.blocks.IToggleable;
+import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
 import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
 import com.fureniku.metropolis.blocks.decorative.helpers.OffsetHelper;
 import com.fureniku.metropolis.datagen.TextureSet;
+import com.fureniku.metropolis.utils.Debug;
 import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.EntityBlock;
@@ -24,12 +26,23 @@ public abstract class MetroEntityBlockDecorative extends MetroBlockDecorativeBas
 
     @Nullable
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new MetroBlockEntity(pos, state);
+        Debug.LogError("createBlockEntity must be overriden in EntityBlock class");
+        return null;
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return createBlockEntity(pos, state);
+    }
+
+    //Boilerplate function which every overriding class will need to use for construction because java's generics suck
+    public static MetroBlockStateFactory getBlockFactory(HelperBase... helpersIn) {
+        return (props, shape, modelDir, modelName, tag, dynamicShape, textures) -> new MetroEntityBlockDecorative(props, shape, modelDir, modelName, tag, SimpleUtils.containsType(OffsetHelper.class, helpersIn), textures) {
+            @Override
+            public ArrayList<HelperBase> getHelpers() {
+                return new ArrayList<>(Arrays.asList(helpersIn));
+            }
+        };
     }
 }

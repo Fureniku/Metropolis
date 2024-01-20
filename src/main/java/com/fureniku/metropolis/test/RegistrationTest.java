@@ -162,22 +162,15 @@ public class RegistrationTest extends RegistrationBase {
                         .setConnectHorizontalHelper(BlockConnectionType.ALL, shapes)
                         .build()));
 
-
+        /* TODO update to new registration for block entities with buildAs()
         blockNames.add("test_block_entity_decorative");
-        /*RegistryObject<Block> blockEntity = retrieveRegisterBlockSet("test_block_entity_decorative", () ->
-                new MetroBlockDecorativeBuilder(_props, DecorativeBuilderType.DECORATIVE)
-                        .setModelDirectory("blocks/decorative/")
-                        .setModelName("barrier_concrete_middle")
-                        .setTextures(TEST_TEXTURE_1)
-                        .buildEntity());*/
-
         TEST_BLOCK_ENTITY_DECORATIVE_ENTITY = registerBlockEntityWithBlock("test_block_entity_decorative", () ->
                 new MetroBlockDecorativeBuilder(_props)
                         .setModelDirectory("blocks/decorative/")
                         .setModelName("barrier_concrete_middle")
                         .setTextures(TEST_TEXTURE_1)
-                        .setConnectHorizontalHelper(BlockConnectionType.ALL, shapes)
-                        .build(), MetroBlockEntity::new);//Metropolis.registrationTest.getBlock("test_block_entity_decorative").get())
+                        //.setConnectHorizontalHelper(BlockConnectionType.ALL, shapes)
+                        .buildAs(factory with helper as parameter), BlockEntityTest::new);*/
 
         _testTab = new CreativeTabSet(getCreativeTabDeferredRegister(), "tab_test", getItem(blockNames.get(0)));
     }

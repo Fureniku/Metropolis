@@ -12,6 +12,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ShapeUtils {
 
+    public static final VoxelShape FULL_BOX = Shapes.box(0, 0, 0, 1, 1, 1);
     private static final Object2IntMap<BlockState> stateToIndex = new Object2IntOpenHashMap<>();
 
     public static VoxelShape makeShape(float size, float height) {

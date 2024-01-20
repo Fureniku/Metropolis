@@ -30,16 +30,6 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBase> {
         _props = props;
     }
 
-    public MetroBlockDecorativeBuilder(MetroBlockDecorativeBuilder partial) {
-        _props = partial._props;
-        _blockShape = partial._blockShape;
-        _modelDir = partial._modelDir;
-        _modelName = partial._modelName;
-        _tag = partial._tag;
-        _textures = partial._textures;
-        _helpers = partial._helpers;
-    }
-
     //region Normal shapes
     public MetroBlockDecorativeBuilder setHeight(float height) { return setShape(16, height, 16); }
     public MetroBlockDecorativeBuilder setWidth(float width) { return setShape(width, 16, width); }
@@ -112,12 +102,21 @@ public class MetroBlockDecorativeBuilder<T extends MetroBlockDecorativeBase> {
     public ArrayList<HelperBase> getHelpers() { return _helpers; }
 
     /**
-     * Generic build function. Creates a block instance of whatever object was specified - or MetroBlockDecorativeBase otherwise.
+     * Generic build function. Due to how generics work, this will always create an instance of MetroBlockDecorativeBase
      * @return The created block instance
      */
     public T build() {
         HelperBase[] helpersArray = _helpers.toArray(new HelperBase[0]);
-        MetroBlockDecorativeBase.MetroBlockStateFactory<T> factory = MetroBlockDecorativeBase.getBlockFactory(helpersArray);
+        T.MetroBlockStateFactory<T> factory = T.getBlockFactory(helpersArray);
         return factory.makeBlock(_props, _blockShape, _modelDir, _modelName, _tag, SimpleUtils.containsType(OffsetHelper.class, helpersArray), _textures);
+    }
+
+    /**
+     * Typed build function. Will return an instance of whatever class is provided in the given factory.
+     * @return the created block instance
+     * @param <T>
+     */
+    public <T extends MetroBlockDecorativeBase> T buildAs(T.MetroBlockStateFactory factory) {
+        return (T) factory.makeBlock(_props, _blockShape, _modelDir, _modelName, _tag, SimpleUtils.containsType(OffsetHelper.class, _helpers), _textures);
     }
 }

@@ -63,7 +63,7 @@ public abstract class MetroBlockDecorativeBase extends MetroBlockBase implements
     }
 
     public static MetroBlockStateFactory getBlockFactory(HelperBase... helpersIn) {
-        return (props, shape, modelDir, modelName, tag, dynamicShape, textures) -> new MetroEntityBlockDecorative(props, shape, modelDir, modelName, tag, SimpleUtils.containsType(OffsetHelper.class, helpersIn), textures) {
+        return (props, shape, modelDir, modelName, tag, dynamicShape, textures) -> new MetroBlockDecorativeBase(props, shape, modelDir, modelName, tag, SimpleUtils.containsType(OffsetHelper.class, helpersIn), textures) {
             @Override
             public ArrayList<HelperBase> getHelpers() {
                 return new ArrayList<>(Arrays.asList(helpersIn));
