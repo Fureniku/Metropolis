@@ -1,13 +1,13 @@
 package com.fureniku.metropolis;
 
 import com.fureniku.metropolis.blockentity.MetroBlockEntity;
-import com.fureniku.metropolis.test.BlockEntityTest;
-import com.fureniku.metropolis.test.RegistrationTest;
+import com.fureniku.metropolis.menus.MetroMenu;
 import com.fureniku.metropolis.utils.CreativeTabSet;
 import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -38,6 +38,7 @@ public abstract class RegistrationBase {
     protected final DeferredRegister<Item> itemRegistry;
     protected final DeferredRegister<CreativeModeTab> creativeTabs;
     protected final DeferredRegister<BlockEntityType<?>> blockEntityRegistry;
+    protected final DeferredRegister<MenuType<?>> menuTypeRegistry;
 
     /**
      * Used by registration groups
@@ -58,6 +59,7 @@ public abstract class RegistrationBase {
         itemRegistry = DeferredRegister.create(ForgeRegistries.ITEMS, modid);
         creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modid);
         blockEntityRegistry = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modid);
+        menuTypeRegistry = DeferredRegister.create(ForgeRegistries.MENU_TYPES, modid);
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::buildCreativeTabs);
@@ -69,6 +71,7 @@ public abstract class RegistrationBase {
         itemRegistry.register(modEventBus);
         creativeTabs.register(modEventBus);
         blockEntityRegistry.register(modEventBus);
+        menuTypeRegistry.register(modEventBus);
     }
 
     /**
@@ -161,6 +164,10 @@ public abstract class RegistrationBase {
         addItem(name, blockItem);
 
         return blockEntityRegistry.register(name + "_entity", () -> BlockEntityType.Builder.of(blockEntity, block.get()).build(null));
+    }
+
+    public <T extends MetroMenu> RegistryObject<MenuType<T>> registerMenuType(String name, Supplier<MenuType<T>> menu) {
+        return menuTypeRegistry.register(name, menu);
     }
 
     /**

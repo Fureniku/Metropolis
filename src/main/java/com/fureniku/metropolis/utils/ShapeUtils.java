@@ -16,7 +16,8 @@ public class ShapeUtils {
     private static final Object2IntMap<BlockState> stateToIndex = new Object2IntOpenHashMap<>();
 
     public static VoxelShape makeShape(float size, float height) {
-        return Block.box(size, 0, size, 16-size, height, 16-size);
+        double x = size/2;
+        return Block.box(8-x, 0, 8-x, 8+x, height, 8+x);
     }
 
     public static VoxelShape makeShape(Vec3 shape) {
