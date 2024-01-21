@@ -9,6 +9,7 @@ import com.fureniku.metropolis.utils.Debug;
 import com.fureniku.metropolis.utils.SimpleUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -205,10 +206,11 @@ public abstract class MetroBlockDecorativeBase extends MetroBlockBase implements
     }
 
     @Override
-    protected void onRightClickRemote(BlockState state, BlockPos pos, Player player) {
+    protected InteractionResult onRightClick(BlockState state, Level level, BlockPos pos, Player player) {
         if (_toggleHelper != null) {
             _toggleHelper.rightClick(state, pos, player, this);
         }
+        return InteractionResult.PASS;
     }
 
     @Override

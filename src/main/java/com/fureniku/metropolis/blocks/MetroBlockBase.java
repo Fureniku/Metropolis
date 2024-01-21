@@ -5,6 +5,8 @@ import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -125,23 +127,7 @@ public abstract class MetroBlockBase extends Block {
      * @param pos The position of the block
      * @param player The player who right-clicked it
      */
-    protected void onRightClick(BlockState state, Level level, BlockPos pos, Player player) {}
-
-    /**
-     * Called when a block is right-clicked - only on the client. Useful for localized messaging or other things that don't change the worldstate.
-     * @param state The blockstate
-     * @param pos The position of the block
-     * @param player The player who right-clicked it
-     */
-    protected void onRightClickLocal(BlockState state, BlockPos pos, Player player) {}
-
-    /**
-     * Called when a block is right-clicked - only on the server. Useful for anything logic-based. Vast majority of cases will probably be in here.
-     * @param state The blockstate
-     * @param pos The position of the block
-     * @param player The player who right-clicked it
-     */
-    protected void onRightClickRemote(BlockState state, BlockPos pos, Player player) {}
+    protected InteractionResult onRightClick(BlockState state, Level level, BlockPos pos, Player player) { return InteractionResult.PASS; }
 
     /**
      * Called when a neighbouring block changes.
@@ -185,6 +171,17 @@ public abstract class MetroBlockBase extends Block {
         blockStateProvider.simpleBlockWithItem(blockRegistryObject.get());
     }
 
+    /**
+     * Get a menu to open
+     * @param state The blockstate
+     * @param level The current level
+     * @param pos The position of the block
+     * @return The menu instance to open
+     */
+    public MenuProvider getMenu(BlockState state, Level level, BlockPos pos) {
+        return null;
+    }
+
     /*
      * FORGE START
      * Everything below here is a Minecraft/Forge function, which will call MY functions above.
@@ -207,12 +204,7 @@ public abstract class MetroBlockBase extends Block {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (hand == InteractionHand.MAIN_HAND) {
-            onRightClick(state, level, pos, player);
-            if (level.isClientSide) {
-                onRightClickLocal(state, pos, player);
-            } else {
-                onRightClickRemote(state, pos, player);
-            }
+            return onRightClick(state, level, pos, player);
         }
         return onUse(state, level, pos, player, hand, result);
     }
@@ -225,5 +217,10 @@ public abstract class MetroBlockBase extends Block {
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighborPos, boolean p_55671_) {
         onNeighbourChanged(state, level, pos, state.getBlock(), neighborPos);
+    }
+
+    @Override
+    public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        return getMenu(state, level, pos);
     }
 }
