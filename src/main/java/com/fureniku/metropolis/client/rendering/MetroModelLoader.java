@@ -1,6 +1,5 @@
 package com.fureniku.metropolis.client.rendering;
 
-import com.fureniku.metropolis.Metropolis;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;

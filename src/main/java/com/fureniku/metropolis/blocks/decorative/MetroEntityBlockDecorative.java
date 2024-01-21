@@ -1,8 +1,6 @@
 package com.fureniku.metropolis.blocks.decorative;
 
-import com.fureniku.metropolis.blockentity.MetroBlockEntity;
 import com.fureniku.metropolis.blocks.IToggleable;
-import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBuilder;
 import com.fureniku.metropolis.blocks.decorative.helpers.HelperBase;
 import com.fureniku.metropolis.blocks.decorative.helpers.OffsetHelper;
 import com.fureniku.metropolis.datagen.TextureSet;

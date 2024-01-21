@@ -1,6 +1,5 @@
 package com.fureniku.metropolis.blocks.decorative.helpers;
 
-import com.fureniku.metropolis.blocks.decorative.MetroBlockDecorativeBase;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.datagen.TextureSet;
 import com.fureniku.metropolis.enums.HelperType;

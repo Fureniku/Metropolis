@@ -10,8 +10,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.Optional;
-
 public class OffsetHelper extends HelperBase {
 
     BlockOffsetDirection _offsetDirection;
