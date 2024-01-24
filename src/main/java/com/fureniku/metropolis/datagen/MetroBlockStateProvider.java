@@ -7,10 +7,10 @@ import com.fureniku.metropolis.utils.Debug;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.client.model.generators.*;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
 
@@ -132,7 +132,7 @@ public class MetroBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * Get a list of RegistryObject<Block> for the mod's blocks.
+     * Get a list of RegistryObject{@literal <Block>} for the mod's blocks.
      * You want to return <code>registration.getBlockArray().values()</code> from your mods RegistrationBase instance.
      * @return all the blocks in the mod
      */

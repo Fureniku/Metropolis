@@ -11,17 +11,17 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -272,32 +272,32 @@ public abstract class RegistrationBase {
 
     //Call anything we want on the common setup then offer it to end mods
     @SubscribeEvent
-    private void common(final FMLCommonSetupEvent event) {
+    protected void common(final FMLCommonSetupEvent event) {
         generateCreativeTabs();
         commonSetup(event);
     }
 
     //Call anything we want on the client setup then offer it to end mods
     @SubscribeEvent
-    private void client(final FMLClientSetupEvent event) {
+    protected void client(final FMLClientSetupEvent event) {
         clientSetup(event);
     }
 
     //Call anything we want on the model setup then offer it to end mods
     @SubscribeEvent
-    private void modelInit(ModelEvent.RegisterGeometryLoaders event) {
+    protected void modelInit(ModelEvent.RegisterGeometryLoaders event) {
         Debug.Log("EVENT CALL: Register Geometry Loaders");
         modelSetup(event);
     }
 
     @SubscribeEvent
-    private void modifyBake(ModelEvent.ModifyBakingResult event) {
+    protected void modifyBake(ModelEvent.ModifyBakingResult event) {
         Debug.Log("EVENT CALL: Modify Baking Result");
         modifyBakingResult(event);
     }
 
     @SubscribeEvent
-    private void modelBakeComplete(ModelEvent.BakingCompleted event) {
+    protected void modelBakeComplete(ModelEvent.BakingCompleted event) {
         Debug.Log("EVENT CALL: Baking completed");
         bakingComplete(event);
     }

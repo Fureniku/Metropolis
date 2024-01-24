@@ -1,9 +1,9 @@
 package com.fureniku.metropolis.client.rendering;
 
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
-import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
+import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class MetroLoaderBuilder extends CustomLoaderBuilder<BlockModelBuilder> {
 
