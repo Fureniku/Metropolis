@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.BiFunction;
@@ -77,10 +78,12 @@ public abstract class BlockSet {
      * @return An instance of BlockSet for method chaining.
      */
     public BlockSet addColorTints(IEventBus modEventBus, BiFunction<BlockAndTintGetter, BlockPos, Integer> blockColor, Supplier<Integer> itemColor) {
-        modEventBus.addListener(this::registerBlockColors);
-        modEventBus.addListener(this::registerItemColors);
-        tintColorBlock = blockColor;
-        tintColorItem = itemColor;
+        if (FMLEnvironment.dist.isClient()) {
+            modEventBus.addListener(this::registerBlockColors);
+            modEventBus.addListener(this::registerItemColors);
+            tintColorBlock = blockColor;
+            tintColorItem = itemColor;
+        }
         return this;
     }
 

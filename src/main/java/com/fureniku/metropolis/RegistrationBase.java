@@ -63,9 +63,10 @@ public abstract class RegistrationBase {
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::buildCreativeTabs);
-        modEventBus.addListener(this::modelInit);
-        modEventBus.addListener(this::modelBakeComplete);
-        modEventBus.addListener(this::modifyBake);
+        //These need to be client only. Unused for now so disabled //todo
+        //modEventBus.addListener(this::modelInit);
+        //modEventBus.addListener(this::modelBakeComplete);
+        //modEventBus.addListener(this::modifyBake);
         modEventBus.addListener(this::generate);
         blockRegistry.register(modEventBus);
         itemRegistry.register(modEventBus);
@@ -217,9 +218,9 @@ public abstract class RegistrationBase {
      * Model setup event. Register model overrides etc here. (Client only)
      * @param event ModelEvent.RegisterGeometryLoaders
      */
-    protected abstract void modelSetup(ModelEvent.RegisterGeometryLoaders event);
-    protected abstract void modifyBakingResult(ModelEvent.ModifyBakingResult event);
-    protected abstract void bakingComplete(ModelEvent.BakingCompleted event);
+    //protected abstract void modelSetup(ModelEvent.RegisterGeometryLoaders event);
+    //protected abstract void modifyBakingResult(ModelEvent.ModifyBakingResult event);
+    //protected abstract void bakingComplete(ModelEvent.BakingCompleted event);
 
     /**
      * Data generation event. Register data generations here.
@@ -284,7 +285,7 @@ public abstract class RegistrationBase {
     }
 
     //Call anything we want on the model setup then offer it to end mods
-    @SubscribeEvent
+    /*@SubscribeEvent
     protected void modelInit(ModelEvent.RegisterGeometryLoaders event) {
         Debug.Log("EVENT CALL: Register Geometry Loaders");
         modelSetup(event);
@@ -300,7 +301,7 @@ public abstract class RegistrationBase {
     protected void modelBakeComplete(ModelEvent.BakingCompleted event) {
         Debug.Log("EVENT CALL: Baking completed");
         bakingComplete(event);
-    }
+    }*/
 
     //Add a block to the registry
     private void addBlock(String key, RegistryObject<Block> value) {

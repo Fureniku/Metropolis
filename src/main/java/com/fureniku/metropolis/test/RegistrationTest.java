@@ -196,15 +196,6 @@ public class RegistrationTest extends RegistrationBase {
     protected void clientSetup(FMLClientSetupEvent event) {}
 
     @Override
-    protected void modelSetup(ModelEvent.RegisterGeometryLoaders event) {}
-
-    @Override
-    protected void modifyBakingResult(ModelEvent.ModifyBakingResult event) {}
-
-    @Override
-    protected void bakingComplete(ModelEvent.BakingCompleted event) {}
-
-    @Override
     protected void dataGen(GatherDataEvent event, DataGenerator gen, PackOutput packOutput, ExistingFileHelper efh) {
         gen.addProvider(event.includeClient(), new MetroBlockStateProvider(packOutput, Metropolis.MODID, efh, Metropolis.INSTANCE.registrationTest));
     }
