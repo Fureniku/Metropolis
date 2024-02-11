@@ -8,6 +8,7 @@ import com.fureniku.metropolis.blocks.decorative.builders.MetroBlockDecorativeBu
 import com.fureniku.metropolis.blocks.decorative.helpers.ConnectHorizontalHelper;
 import com.fureniku.metropolis.datagen.MetroBlockStateProvider;
 import com.fureniku.metropolis.enums.BlockConnectionType;
+import com.fureniku.metropolis.items.MetroItemSimple;
 import com.fureniku.metropolis.utils.CreativeTabSet;
 import com.fureniku.metropolis.utils.ShapeUtils;
 import net.minecraft.data.DataGenerator;
@@ -162,6 +163,8 @@ public class RegistrationTest extends RegistrationBase {
                         .setConnectHorizontalHelper(BlockConnectionType.ALL, shapes)
                         .build()));
 
+        registerItem("test_basic_item", MetroItemSimple::new);
+
         /* TODO update to new registration for block entities with buildAs()
         blockNames.add("test_block_entity_decorative");
         TEST_BLOCK_ENTITY_DECORATIVE_ENTITY = registerBlockEntityWithBlock("test_block_entity_decorative", () ->
@@ -180,6 +183,8 @@ public class RegistrationTest extends RegistrationBase {
         for (int i = 0; i < blockNames.size(); i++) {
             _testTab.addItem(getItem(blockNames.get(i)).get().getDefaultInstance());
         }
+
+        //_testTab.addItem(getItem("test_basic_item").get().getDefaultInstance());
     }
 
     @Override

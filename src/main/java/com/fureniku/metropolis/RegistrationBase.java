@@ -1,9 +1,13 @@
 package com.fureniku.metropolis;
 
 import com.fureniku.metropolis.blockentity.MetroBlockEntity;
+import com.fureniku.metropolis.client.screens.UIRenderHandler;
 import com.fureniku.metropolis.menus.MetroMenu;
 import com.fureniku.metropolis.utils.CreativeTabSet;
 import com.fureniku.metropolis.utils.Debug;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -12,6 +16,9 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -19,6 +26,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -64,9 +72,13 @@ public abstract class RegistrationBase {
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::buildCreativeTabs);
         //These need to be client only. Unused for now so disabled //todo
-        //modEventBus.addListener(this::modelInit);
-        //modEventBus.addListener(this::modelBakeComplete);
-        //modEventBus.addListener(this::modifyBake);
+        if (FMLEnvironment.dist.isClient()) {
+            //modEventBus.addListener(this::modelInit);
+            //modEventBus.addListener(this::modelBakeComplete);
+            //modEventBus.addListener(this::modifyBake);
+            modEventBus.addListener(this::guiOverlay);
+        }
+
         modEventBus.addListener(this::generate);
         blockRegistry.register(modEventBus);
         itemRegistry.register(modEventBus);
@@ -151,6 +163,16 @@ public abstract class RegistrationBase {
         addBlock(name, block);
         addItem(name, blockItem);
         return block;
+    }
+
+    public String registerItem(String name, Supplier<Item> itemClass) {
+        retrieveRegisterItem(name, itemClass);
+        return name;
+    }
+
+    public RegistryObject<Item> retrieveRegisterItem(String name, Supplier<Item> itemClass) {
+        RegistryObject<Item> item = itemRegistry.register(name, itemClass);
+        return item;
     }
 
     public <T extends MetroBlockEntity> RegistryObject<BlockEntityType<T>> registerBlockEntity(String name, BlockEntityType.BlockEntitySupplier<T> blockEntity, Block... validBlocks) {
@@ -302,6 +324,12 @@ public abstract class RegistrationBase {
         Debug.Log("EVENT CALL: Baking completed");
         bakingComplete(event);
     }*/
+
+    @SubscribeEvent
+    protected void guiOverlay(RegisterGuiOverlaysEvent event) {
+        event.registerAboveAll("test_ui_class", UIRenderHandler::new);
+    }
+
 
     //Add a block to the registry
     private void addBlock(String key, RegistryObject<Block> value) {
