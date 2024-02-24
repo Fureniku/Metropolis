@@ -79,10 +79,10 @@ public abstract class BlockSet {
      */
     public BlockSet addColorTints(IEventBus modEventBus, BiFunction<BlockAndTintGetter, BlockPos, Integer> blockColor, Supplier<Integer> itemColor) {
         if (FMLEnvironment.dist.isClient()) {
-            modEventBus.addListener(this::registerBlockColors);
-            modEventBus.addListener(this::registerItemColors);
-            tintColorBlock = blockColor;
-            tintColorItem = itemColor;
+            //modEventBus.addListener(this::registerBlockColors);
+            //modEventBus.addListener(this::registerItemColors);
+            //tintColorBlock = blockColor;
+            //tintColorItem = itemColor;
         }
         return this;
     }

@@ -76,7 +76,7 @@ public abstract class RegistrationBase {
             //modEventBus.addListener(this::modelInit);
             //modEventBus.addListener(this::modelBakeComplete);
             //modEventBus.addListener(this::modifyBake);
-            modEventBus.addListener(this::guiOverlay);
+            //modEventBus.addListener(this::guiOverlay);
         }
 
         modEventBus.addListener(this::generate);
@@ -332,12 +332,12 @@ public abstract class RegistrationBase {
 
 
     //Add a block to the registry
-    private void addBlock(String key, RegistryObject<Block> value) {
+    protected void addBlock(String key, RegistryObject<Block> value) {
         block_map.put(key, value);
     }
 
     //Add an item to the registry
-    private void addItem(String key, RegistryObject<Item> value) {
+    protected void addItem(String key, RegistryObject<Item> value) {
         item_map.put(key, value);
     }
 }

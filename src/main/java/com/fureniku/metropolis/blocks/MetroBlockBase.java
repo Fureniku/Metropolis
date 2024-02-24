@@ -203,7 +203,7 @@ public abstract class MetroBlockBase extends Block {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (hand == InteractionHand.MAIN_HAND) {
-            return onRightClick(state, level, pos, player);
+            onRightClick(state, level, pos, player);
         }
         return onUse(state, level, pos, player, hand, result);
     }
